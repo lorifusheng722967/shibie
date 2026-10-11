@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>有毒有害因素识别｜群体中毒事件处置课件</title>
+<style>
+:root{
+  --ink:#1B2631; --ink2:#4B5966; --ink3:#7A8794;
+  --paper:#F6F7F5; --panel:#FFFFFF; --rule:#DCE1E4; --rule2:#EEF1F2;
+  --water:#0D6B74; --water-bg:#E4F1F1;
+  --air:#8A5B24; --air-bg:#F5ECE0;
+  --rad:#B88A00; --rad-ink:#3A2E00; --rad-bg:#FAF2D6;
+  --alert:#B42318; --alert-bg:#FCEBE8;
+  --lab:#2B5797; --lab-bg:#E9EFF8;
+  --ok:#1E7046; --ok-bg:#E3F2E9;
+  --side:#15202A; --side2:#1F2E3B; --side-text:#DCE3E8; --side-dim:#8D9BA7;
+  --serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","Noto Serif SC","SimSun",serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;font-family:var(--sans);font-size:16px;line-height:1.75;color:var(--ink);background:var(--paper);display:flex;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid #4C8DF6;outline-offset:2px;border-radius:3px}
+
+/* ---------- 侧栏 ---------- */
+#sidebar{width:272px;flex-shrink:0;background:var(--side);color:var(--side-text);height:100vh;overflow-y:auto;position:sticky;top:0;display:flex;flex-direction:column}
+.brand{padding:22px 22px 18px;border-bottom:1px solid #26384A}
+.brand b{display:block;font-family:var(--serif);font-size:19px;letter-spacing:.04em;color:#fff}
+.brand span{font-size:12.5px;color:var(--side-dim)}
+.nav-top{padding:10px 0;border-bottom:1px solid #26384A}
+.nav-group{padding:12px 0 8px;border-bottom:1px solid #26384A}
+.nav-title{display:flex;align-items:center;gap:8px;padding:0 22px 6px;font-size:13px;color:var(--side-dim);letter-spacing:.06em}
+.nav-title i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.nav-item{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;padding:9px 22px 9px 40px;border:0;background:none;text-align:left;cursor:pointer;font-size:15px;color:var(--side-text);border-left:3px solid transparent;transition:background .15s}
+.nav-top .nav-item{padding-left:22px}
+.nav-item:hover{background:var(--side2)}
+.nav-item.active{background:var(--side2);color:#fff;font-weight:600;border-left-color:var(--c,#fff)}
+.nav-item .seen{font-size:12px;color:#6FBF8F}
+.side-foot{margin-top:auto;padding:16px 22px;font-size:12px;color:var(--side-dim);line-height:1.6}
+
+/* ---------- 主区 ---------- */
+#main{flex:1;min-width:0;height:100vh;overflow-y:auto}
+.wrap{max-width:900px;margin:0 auto;padding:40px 40px 80px}
+.topbar{display:none}
+h1,h2,h3,h4{font-family:var(--serif);line-height:1.35;margin:0}
+h1{font-size:31px;font-weight:700;letter-spacing:.02em}
+h2{font-size:22px;font-weight:700;margin:44px 0 14px}
+h3{font-size:18px;font-weight:700;margin:24px 0 8px}
+h4{font-size:15px;font-weight:700;font-family:var(--sans);margin:0 0 4px;color:var(--ink2)}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 12px;padding-left:1.4em}
+li{margin:3px 0}
+b,strong{font-weight:650}
+.lead{font-size:17px;color:var(--ink2);margin-top:12px;max-width:44em}
+.muted{color:var(--ink3)}
+.small{font-size:14px}
+
+.cat-tag{display:inline-block;font-size:13px;font-weight:600;padding:2px 10px;border-radius:3px;margin-bottom:12px}
+.cat-water{color:var(--water);background:var(--water-bg)}
+.cat-air{color:var(--air);background:var(--air-bg)}
+.cat-rad{color:var(--rad-ink);background:var(--rad-bg)}
+
+/* 表格 */
+.tbl-wrap{overflow-x:auto;margin:14px 0 18px;border:1px solid var(--rule);border-radius:4px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:14.5px;line-height:1.6}
+th,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule2)}
+th{background:#F1F3F4;font-weight:650;color:var(--ink2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right}
+
+/* 提示块 */
+.note{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--ink3);padding:12px 16px;border-radius:3px;margin:14px 0;font-size:15px}
+.note.lab{border-left-color:var(--lab);background:var(--lab-bg)}
+.note.alert{border-left-color:var(--alert);background:var(--alert-bg)}
+.note.ok{border-left-color:var(--ok);background:var(--ok-bg)}
+.note p:last-child,.note ul:last-child{margin-bottom:0}
+
+/* 按钮 */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;font-size:15px;font-weight:600;transition:background .15s}
+.btn:hover{background:#2C3B49}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--rule2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* 测验 */
+.quiz{margin-top:12px}
+.q{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:16px 18px;margin:12px 0}
+.q-stem{font-weight:600;margin-bottom:10px}
+.opt{display:flex;gap:10px;width:100%;text-align:left;padding:9px 12px;margin:6px 0;border:1px solid var(--rule);border-radius:4px;background:#FBFBFA;cursor:pointer;font-size:15px;line-height:1.6}
+.opt:hover:not(:disabled){border-color:var(--ink3);background:#fff}
+.opt .k{font-weight:700;color:var(--ink3);min-width:1.2em}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--alert);background:var(--alert-bg)}
+.opt:disabled{cursor:default}
+.q-exp{margin-top:10px;font-size:14.5px;padding:10px 12px;border-radius:3px;background:var(--rule2)}
+.q-exp b{margin-right:4px}
+
+@media (max-width:900px){
+  body{display:block}
+  #sidebar{position:fixed;left:0;top:0;z-index:30;transform:translateX(-100%);transition:transform .25s}
+  body.nav-open #sidebar{box-shadow:4px 0 24px rgba(0,0,0,.25)}
+  body.nav-open #sidebar{transform:none}
+  .topbar{display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:20;background:var(--side);color:#fff;padding:10px 16px}
+  .topbar button{background:none;border:1px solid #3A4E60;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer}
+  #main{height:auto;overflow:visible}
+  .wrap{padding:24px 18px 64px}
+  h1{font-size:25px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{#sidebar,.topbar{display:none}#main{height:auto;overflow:visible}}
+
+/* ---------- 首页 ---------- */
+.hero{padding:8px 0 8px}
+.hero h1{font-size:36px;letter-spacing:.04em}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:30px 0 8px;border:1px solid var(--rule);border-radius:6px;overflow:hidden;background:var(--panel)}
+.sw{padding:0 0 14px;border-right:1px solid var(--rule)}
+.sw:last-child{border-right:0}
+.sw .chip-color{height:86px}
+.sw b{display:block;font-family:var(--serif);font-size:18px;padding:12px 14px 2px}
+.sw span{display:block;font-size:13.5px;color:var(--ink2);padding:0 14px;line-height:1.55}
+.sw-cap{font-size:13px;color:var(--ink3);margin:0 0 30px}
+.mod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0 8px}
+.mod{background:var(--panel);border:1px solid var(--rule);border-top:4px solid var(--c);border-radius:4px;padding:16px 18px}
+.mod h3{margin:0 0 6px}
+.mod ul{list-style:none;padding:0;margin:8px 0 0}
+.mod li{margin:0}
+.mod button{border:0;background:none;padding:4px 0;cursor:pointer;color:var(--ink);text-align:left;font-size:15px;border-bottom:1px dashed transparent}
+.mod button:hover{border-bottom-color:var(--ink3)}
+.steps{counter-reset:s;list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:12px 0}
+.steps li{counter-increment:s;background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:12px 14px;font-size:14.5px;line-height:1.6}
+.steps li::before{content:counter(s);display:block;font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink3);margin-bottom:2px}
+
+/* ---------- 毒物识别卡 ---------- */
+.page-tools{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:26px 0 4px;flex-wrap:wrap}
+.tox{background:var(--panel);border:1px solid var(--rule);border-top:4px solid var(--c);border-radius:6px;margin:16px 0;scroll-margin-top:20px}
+.tox-head{display:grid;grid-template-columns:1fr auto;gap:4px 16px;width:100%;padding:16px 20px 10px;border:0;background:none;text-align:left;cursor:pointer}
+.tox-name{font-family:var(--serif);font-size:23px;font-weight:700}
+.tox-alias{grid-column:1;font-size:13.5px;color:var(--ink3)}
+.tox-toggle{grid-column:2;grid-row:1/3;align-self:center;font-size:14px;color:var(--ink2);border:1px solid var(--rule);border-radius:4px;padding:3px 12px;white-space:nowrap}
+.tox-head:hover .tox-toggle{border-color:var(--ink3)}
+.chips{grid-column:1/3;display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font-size:13.5px;padding:2px 9px;border-radius:999px;border:1px solid #E7B8B2;color:var(--alert);background:#FFF8F7}
+.tox-key{margin:0 20px 16px;padding:10px 14px 10px 14px;border-left:4px solid var(--alert);background:var(--alert-bg);border-radius:0 3px 3px 0}
+.tox-key h4{color:var(--alert);display:flex;align-items:center;gap:6px}
+.tox-key ul{margin:4px 0 0;font-size:15px}
+.tox-body{padding:0 20px 20px}
+.tox-meta{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--rule2)}
+.tox-meta p{font-size:15px;margin:0}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--rule);margin-top:6px;overflow-x:auto}
+.tab{border:0;background:none;padding:9px 14px;cursor:pointer;font-size:15px;color:var(--ink2);border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tab[aria-selected=true]{color:var(--ink);font-weight:650;border-bottom-color:var(--c)}
+.tabpanel{padding:14px 2px 0;font-size:15.5px}
+.tabpanel .tbl-wrap{margin-top:6px}
+.lab-line{display:flex;gap:8px;align-items:baseline}
+.std{display:inline-block;font-size:13px;color:var(--lab);background:var(--lab-bg);border-radius:3px;padding:1px 8px;margin-top:6px}
+
+/* ---------- 案例 ---------- */
+.case{margin:40px 0 10px;background:var(--panel);border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.case-head{padding:14px 22px;border-bottom:1px solid var(--rule2);display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.case-head h3{margin:0;font-size:21px}
+.case-head span{font-size:13.5px;color:var(--ink3)}
+.case-story{padding:18px 22px 6px;font-family:var(--serif);font-size:17px;line-height:1.95;max-width:42em}
+.case-story p{margin-bottom:14px}
+.case-ask{padding:0 22px 18px}
+.case-ask ol{font-size:15.5px}
+.case-ans{padding:16px 22px 18px;border-top:1px dashed var(--rule);background:#FAFBFA;font-size:15.5px}
+
+/* ---------- 速查 ---------- */
+.sign-group{margin:14px 0}
+.sign-group h4{margin-bottom:6px}
+.sign-list{display:flex;flex-wrap:wrap;gap:8px}
+.sign{border:1px solid var(--rule);background:var(--panel);border-radius:999px;padding:5px 14px;cursor:pointer;font-size:14.5px;transition:background .12s,border-color .12s}
+.sign:hover{border-color:var(--ink3)}
+.sign[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.result{display:grid;grid-template-columns:1fr auto;gap:4px 16px;background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--c);border-radius:4px;padding:12px 16px;margin:10px 0}
+.result b{font-family:var(--serif);font-size:19px}
+.result .meta{font-size:13.5px;color:var(--ink3)}
+.result .hit{grid-column:1/3;display:flex;flex-wrap:wrap;gap:6px}
+.result .hit span{font-size:13px;background:var(--rule2);border-radius:3px;padding:1px 8px}
+.result .hit span.on{background:var(--ink);color:#fff}
+.bar{height:6px;background:var(--rule2);border-radius:3px;overflow:hidden;grid-column:1/3}
+.bar i{display:block;height:100%;background:var(--c)}
+
+/* ---------- INES ---------- */
+.ines{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:18px 0 0}
+.ines button{border:0;cursor:pointer;padding:14px 4px 10px;color:#fff;font-weight:700;font-size:20px;font-family:var(--serif);border-radius:3px;line-height:1.2;opacity:.82;transition:opacity .15s,transform .15s}
+.ines button small{display:block;font-family:var(--sans);font-size:12px;font-weight:500;margin-top:4px}
+.ines button[aria-pressed=true]{opacity:1;transform:translateY(-4px);box-shadow:0 4px 0 var(--ink)}
+.ines-band{display:grid;grid-template-columns:1fr 3fr 4fr;gap:4px;font-size:13px;color:var(--ink3);text-align:center;margin-top:6px}
+.ines-band span{border-top:2px solid var(--rule);padding-top:4px}
+.ines-detail{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:16px 20px;margin:14px 0}
+.ines-detail h3{margin:0 0 6px}
+
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--rule)}
+.pager button{max-width:48%}
+.pager .next{margin-left:auto}
+
+@media (max-width:900px){
+  .swatches{grid-template-columns:repeat(2,1fr)}
+  .sw:nth-child(2){border-right:0}
+  .sw:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+  .mod-grid,.steps{grid-template-columns:1fr}
+  .tox-meta{grid-template-columns:1fr}
+  .ines{grid-template-columns:repeat(4,1fr)}
+  .ines-band{display:none}
+  .case-story{font-size:16px}
+}
+
+</style>
+</head>
+<body>
+<nav id="sidebar" aria-label="课件目录"></nav>
+<main id="main">
+  <div class="topbar"><button id="menu-btn" aria-label="打开目录">目录</button><span>有毒有害因素识别</span></div>
+  <div class="wrap" id="content"></div>
+</main>
+<script>
+const CATS={water:{name:'饮用水污染',color:'#0D6B74'},air:{name:'大气污染',color:'#8A5B24'},rad:{name:'核与辐射',color:'#B88A00'}};
+const NAV=[
+  {cat:'water',items:[['water_chem','化学性污染物'],['water_bio','生物性污染物'],['water_eutro','水体富营养化']]},
+  {cat:'air',items:[['air_chem','化学性有害气体'],['air_bio','生物性及其他污染']]},
+  {cat:'rad',items:[['nuke_level','核事故分级（INES）'],['nuke_rad','辐射事故分级与放射损伤'],['nuke_state','应急状态与公众防护']]}
+];
+const SIGN_GROUPS=[
+  ['颜色',[['cyan','口唇、指甲青紫，吸氧不缓解'],['cherry','皮肤黏膜樱桃红'],['bright','皮肤黏膜及静脉血鲜红'],['yellowmouth','口腔咽喉黄色腐蚀灼伤']]],
+  ['气味',[['almond','呼气苦杏仁味'],['garlic','呼气或呕吐物大蒜味'],['egg','现场臭鸡蛋味'],['pungent','强烈刺激性气味'],['metal','口中金属味']]],
+  ['神经系统',[['miosis','瞳孔针尖样缩小'],['tremor','肌束震颤或抽搐'],['coma','意识障碍、昏迷'],['neuro','1～3周后手套袜套样麻木'],['sudden','"电击样"骤然倒地'],['headache','同处一室多人头痛头晕']]],
+  ['消化系统',[['gi','剧烈呕吐、腹泻'],['ricewater','米泔水样便，无腹痛'],['bloody','脓血便、里急后重'],['vomitfirst','突发喷射性呕吐，病程短'],['jaundice','黄疸、茶色尿、厌油']]],
+  ['呼吸系统',[['eye','眼刺痛、流泪'],['cough','呛咳、胸闷、窒息感'],['edema','肺水肿'],['pneumonia','高热伴肺部斑片影']]],
+  ['全身及其他',[['hyperthermia','高热≥40℃、大汗烦渴'],['sweat','多汗、流涎'],['fever','持续发热、相对缓脉'],['rose','胸腹部玫瑰疹'],['flu','发热肌痛，无肺炎，数日自愈'],['sneeze','季节性鼻痒、喷嚏、哮喘'],['shock','休克、严重脱水'],['kidney','少尿、无尿'],['skin','无热源接触的红斑、水疱'],['lympho','淋巴细胞明显下降']]]
+];
+
+const PAGES={};
+
+PAGES.water_chem={cat:'water',title:'生活饮用水：化学性污染物',
+lead:'工业废水排放、危险化学品泄漏、农药污染和人为投毒，是饮用水化学性污染的主要原因。判断时先抓住"共同水源＋短潜伏期"，再用特征体征锁定毒物，最后由实验室证实。',
+intro:`<div class="note"><p><b>饮用水化学性中毒的共同特点</b></p><ul><li>潜伏期短，以分钟至数小时计，远短于肠道传染病（以天计）；</li><li>病例在短时间内集中出现，分布范围与供水范围一致；</li><li>病情轻重与饮水量相关，呈剂量—反应关系；</li><li>无传染性，停用污染水源后不再出现新病例。</li></ul></div>`,
+toxins:[
+{id:'arsenic',name:'砷化物',alias:'三氧化二砷（砒霜）、含砷农药、含砷工业废水',signs:['gi','ricewater','metal','garlic','neuro','shock'],
+chips:['剧烈吐泻','口中金属味','1～3周后手套袜套样麻木'],
+key:['饮水后数分钟至数小时出现剧烈呕吐、腹痛、腹泻，重者米泔样或血样便，酷似"霍乱"','患者常诉口中金属味、咽喉烧灼感，呕吐物可有大蒜样臭味','恢复期出现对称性、由远端向近端发展的手套、袜套样感觉障碍，是回顾诊断的重要线索'],
+src:'含砷矿石冶炼、化工和制药废水排放；含砷农药保管不当或施用后径流；三氧化二砷误服或投毒。部分地区高砷地下水多导致慢性地方性砷中毒，而非急性群体中毒。',
+mech:'三价砷与酶蛋白的巯基（—SH）结合，抑制丙酮酸氧化酶等含巯基酶，阻断细胞能量代谢；同时直接损伤毛细血管，通透性增加，大量体液渗入组织间隙和肠腔，引起脱水和休克。',
+tabs:[
+['临床表现',`<ul><li><b>急性胃肠炎：</b>饮服后数分钟出现恶心、呕吐、腹痛、腹泻，严重者水样便或血便，可迅速出现脱水和电解质紊乱。</li><li><b>休克：</b>24小时内发生，极度烦躁不安、眼睑水肿、心音低钝，常伴心律失常。</li><li><b>周围神经病：</b>1～3周内发生。四肢麻木、针刺感，运动力弱，症状由远端向近端对称性扩展，呈手套、袜套样分布。</li><li><b>其他：</b>中毒性肝病（ALT、AST升高），体温升高（>38℃），皮肤皮炎、出血、紫癜；可有心肌损害和急性肾损伤。数周后指甲可见横行白纹（米氏线）。</li></ul>`],
+['检验分析',`<ul><li><b>尿砷</b>明显增高，是急性期最常用的诊断指标；发砷、指甲砷增多，可反映较长时间的暴露。</li><li>急性中毒后2～3周出现贫血、粒细胞减少。</li><li>同时检测可疑水样、呕吐物、剩余食物中的砷含量，建立"水—人"证据链。</li></ul><span class="std">GB 5749—2022 砷限值：0.01 mg/L</span>`],
+['鉴别诊断',`<div class="tbl-wrap"><table><tr><th>疾病</th><th>与砷中毒的区别</th></tr><tr><td>霍乱</td><td>潜伏期1～3天；先泻后吐、无腹痛、一般不发热；粪便霍乱弧菌培养阳性</td></tr><tr><td>细菌性食物中毒</td><td>多有发热，病例与某一餐次或食物相关，而非与水源相关</td></tr><tr><td>有机磷中毒</td><td>虽也有大蒜味，但有瞳孔缩小、大汗、肌颤，胆碱酯酶降低</td></tr></table></div>`],
+['救治要点',`<ul><li>立即停止饮用可疑水源，尽早催吐、温水洗胃。</li><li><b>特效解毒剂：</b>二巯丙磺钠或二巯丁二钠等巯基络合剂，尽早足量使用。</li><li>积极补液，纠正休克和电解质紊乱；监测心电图和肝肾功能。</li><li>出院后随访周围神经病变。</li></ul>`]]},
+
+{id:'cyanide',name:'氰化物',alias:'氰化钠、氰化钾，含氰苷植物加工废水',signs:['bright','almond','sudden','coma'],
+chips:['呼气苦杏仁味','皮肤黏膜鲜红','"电击样"骤死'],
+key:['呼出气有苦杏仁味','明明严重缺氧，皮肤、黏膜及静脉血却呈鲜红色而不发绀','大剂量摄入可在数分钟内出现"电击型"骤死'],
+src:'电镀、冶金提金、化工合成等行业的含氰废水；苦杏仁、木薯、桃仁等含氰苷植物的加工废水；运输泄漏；投毒。',
+mech:'氰离子与细胞色素氧化酶中的三价铁结合，使呼吸链中断，细胞无法利用氧，即"细胞内窒息"。血液中的氧没有被组织消耗，静脉血氧含量升高，因而皮肤黏膜呈鲜红色。',
+tabs:[
+['临床表现',`<ul><li><b>胃肠道：</b>恶心、呕吐，口咽部灼热感。</li><li><b>脑病：</b>神志不清、面色苍白、四肢厥冷、瞳孔略大。</li><li><b>病程进展：</b>前驱期（头痛、乏力、呼吸加快）→呼吸困难期→痉挛期（强直性或阵发性抽搐）→麻痹期（昏迷、呼吸停止）。</li><li><b>死亡：</b>可出现"电击型"骤死。</li></ul>`],
+['检验分析',`<ul><li><b>尿硫氰酸盐</b>大量增加（不吸烟者 >2 mg/L，吸烟者 >14 mg/L）。</li><li>血浆氰离子浓度升高；动、静脉血氧分压差缩小。</li><li>血乳酸明显升高，伴代谢性酸中毒。</li></ul><div class="note lab small"><p>为什么查尿硫氰酸盐？体内的硫转移酶会把氰离子转化为低毒的硫氰酸盐，经尿排出。这一转化也正是硫代硫酸钠解毒的原理。</p></div><span class="std">GB 5749—2022 氰化物限值：0.05 mg/L</span>`],
+['鉴别诊断',`<div class="tbl-wrap"><table><tr><th>毒物</th><th>皮肤颜色</th><th>其他线索</th></tr><tr><td>氰化物</td><td>鲜红</td><td>苦杏仁味，进展极快</td></tr><tr><td>一氧化碳</td><td>樱桃红</td><td>燃烧源、密闭空间，HbCO升高</td></tr><tr><td>亚硝酸盐</td><td>青紫</td><td>吸氧不缓解，血液呈巧克力色</td></tr><tr><td>硫化氢</td><td>发绀</td><td>臭鸡蛋味，有限空间</td></tr></table></div>`],
+['救治要点',`<ul><li>争分夺秒，立即脱离并高流量吸氧。</li><li><b>亚硝酸盐—硫代硫酸钠疗法：</b>先吸入亚硝酸异戊酯，继以3%亚硝酸钠缓慢静注，随后注入硫代硫酸钠；也可用4-二甲氨基苯酚（4-DMAP），有条件可用羟钴胺。</li><li><b>原理：</b>亚硝酸盐使部分血红蛋白变为高铁血红蛋白，后者与氰离子结合，把细胞色素氧化酶"夺回来"；硫代硫酸钠再将氰转化为硫氰酸盐排出。</li></ul>`]]},
+
+{id:'op',name:'有机磷农药',alias:'敌敌畏、乐果、对硫磷、马拉硫磷等',signs:['miosis','sweat','tremor','garlic','coma','edema'],
+chips:['瞳孔针尖样缩小','大汗流涎','肌束震颤'],
+key:['瞳孔缩小＋多汗流涎＋肌束震颤，是最具特征的组合','呼出气、呕吐物常有大蒜样臭味','全血胆碱酯酶活力下降，下降程度与病情轻重相关'],
+src:'在水源附近配制农药、清洗施药器械、丢弃农药空瓶；农田施药后遇雨形成径流；农药仓库泄漏。',
+mech:'有机磷与胆碱酯酶结合，形成磷酰化胆碱酯酶，使其失去水解乙酰胆碱的能力。乙酰胆碱在突触处蓄积，引起毒蕈碱样（M样）、烟碱样（N样）和中枢神经系统症状。',
+tabs:[
+['临床表现',`<div class="tbl-wrap"><table><tr><th>分级</th><th>表现</th></tr><tr><td>轻度</td><td>头晕、恶心、呕吐、出汗、腹痛、视物模糊</td></tr><tr><td>中度</td><td>面色苍白，流涎或口吐白沫，多汗，肌内震颤，瞳孔缩小，呼吸轻度困难</td></tr><tr><td>重度</td><td>意识不清，瞳孔极度缩小（针尖样），对光反应消失，嘴唇发绀，呼吸困难，肺水肿，抽搐，昏迷，休克</td></tr></table></div><p><b>症状来源：</b>M样症状——瞳孔缩小、多汗、流涎、支气管分泌物增多、腹痛腹泻；N样症状——肌束震颤、肌无力乃至呼吸肌麻痹；中枢症状——头晕、烦躁、抽搐、昏迷。</p><p><b>需警惕的后续病变：</b>急性症状缓解后1～4天可出现中间综合征（颈肌、呼吸肌无力）；2～3周后可出现迟发性多发性神经病。</p>`],
+['检验分析',`<div class="tbl-wrap"><table><tr><th>中毒程度</th><th class="num">全血胆碱酯酶活力</th></tr><tr><td>轻度</td><td class="num">50%～70%</td></tr><tr><td>中度</td><td class="num">30%～50%</td></tr><tr><td>重度</td><td class="num">&lt;30%</td></tr></table></div><p>同时对可疑水样、呕吐物进行有机磷农药定性定量检测。</p>`],
+['鉴别诊断',`<ul><li><b>氨基甲酸酯类农药：</b>症状相似但较轻，胆碱酯酶数小时内可自行恢复。</li><li><b>拟除虫菊酯类：</b>以面部烧灼、蚁走感为主，胆碱酯酶正常。</li><li><b>五氯酚、中暑：</b>虽大汗，但伴高热、瞳孔不缩小。</li></ul>`],
+['救治要点',`<ul><li>彻底清除毒物：脱去污染衣物，肥皂水清洗皮肤，经口中毒者洗胃。</li><li><b>阿托品：</b>早期、足量、反复给药，直至"阿托品化"——瞳孔较前扩大、口干、皮肤干燥、颜面潮红、肺部啰音减少、心率加快。</li><li><b>胆碱酯酶复能剂：</b>氯解磷定早期足量使用。</li><li>警惕阿托品中毒（狂躁、高热、尿潴留）。</li></ul>`]]},
+
+{id:'nitrite',name:'亚硝酸盐',alias:'亚硝酸钠（工业用盐、混凝土防冻剂）',signs:['cyan','coma'],
+chips:['口唇指甲青紫','吸氧不缓解','血液呈巧克力色'],
+key:['青紫症、"乌嘴病"：手指、嘴唇、口腔黏膜呈青紫色','发绀明显而呼吸困难相对较轻，吸氧后发绀不消退','抽出的静脉血呈巧克力色，在空气中振摇也不变红'],
+src:'亚硝酸钠误作食盐；建材防冻剂、化工原料泄漏或被雨水冲入水井；硝酸盐含量高的井水或反复煮沸的"蒸锅水"；腌制时间不足的蔬菜。',
+mech:'亚硝酸盐将血红蛋白中的二价铁氧化为三价铁，形成高铁血红蛋白。高铁血红蛋白不能携带氧，导致组织缺氧；其含量超过10%～15%即可出现发绀。',
+tabs:[
+['临床表现',`<ul><li><b>潜伏期：</b>短，一般10分钟至3小时。</li><li><b>青紫症、乌嘴病：</b>手指、嘴唇、口腔黏膜呈青紫色。</li><li><b>症状：</b>头晕、恶心、呕吐，血压下降，面苍白。</li><li><b>重症：</b>全身青紫，呼吸急促，昏迷，瞳孔大，两眼上翻。</li></ul><p class="note small">床旁小线索：脉搏血氧饱和度常停留在85%左右，吸氧后也不上升。</p>`],
+['检验分析',`<ul><li><b>振摇试验：</b>抗凝血在空气中剧烈振摇15分钟仍不转鲜红，提示高铁血红蛋白。</li><li><b>高铁血红蛋白定量：</b>分光光度法或血气分析仪碳氧/高铁血红蛋白测定。须在使用亚甲蓝前尽早采血，治疗后会迅速下降。</li><li><b>现场快速检测：</b>格里斯试剂检测可疑水、食物，亚硝酸盐存在时显紫红色。</li></ul>`],
+['鉴别诊断',`<ul><li><b>心肺疾病所致缺氧：</b>吸氧后发绀可改善，血液暗红而非巧克力色。</li><li><b>一氧化碳中毒：</b>樱桃红色，HbCO升高。</li><li><b>氰化物中毒：</b>鲜红色，苦杏仁味。</li></ul>`],
+['救治要点',`<ul><li><b>小剂量亚甲蓝（1～2 mg/kg）缓慢静注</b>是特效治疗，必要时1小时后重复。</li><li>配合大剂量维生素C和葡萄糖；轻症可口服维生素C并留观。</li><li><b>注意：</b>大剂量亚甲蓝本身是氧化剂，会使血红蛋白氧化为高铁血红蛋白，反而加重病情——"小剂量治亚硝酸盐，大剂量治氰化物"。</li><li>G6PD缺乏者慎用亚甲蓝，可致溶血且疗效差。</li><li>高压氧不能纠正高铁血红蛋白，不作为首选。</li></ul>`]]},
+
+{id:'pcp',name:'五氯酚（钠）',alias:'灭钉螺药、木材防腐剂、除草剂',signs:['hyperthermia','sweat','tremor'],
+chips:['高热可达41℃','大汗淋漓、烦渴','禁用阿托品'],
+key:['重症高热可达41℃，大汗淋漓，烦渴，心动过速，面部潮红','血压先升后降','有灭螺药、防腐剂接触史，退热药效果差'],
+src:'血吸虫病流行区用五氯酚钠灭钉螺；木材防腐和除草；水源附近施药后遇雨径流，或包装物随意丢弃。',
+mech:'五氯酚是氧化磷酸化解偶联剂：细胞呼吸照常进行，但能量不能以ATP形式储存，而是以热的形式散发，导致产热剧增、代谢亢进、大量出汗和脱水。',
+tabs:[
+['临床表现',`<ul><li><b>早期：</b>乏力、无力、下肢沉重、头晕、食欲缺乏。</li><li><b>重症：</b>高热可达41℃，大汗淋漓，烦渴，心动过速，面部潮红，血压先升后降；可伴肌肉强直、抽搐和意识障碍。</li><li>死亡者尸僵出现早而明显。</li></ul>`],
+['检验分析',`<ul><li>血、尿检出五氯酚（重度 >7.5 μmol/L），二硝基酚阳性。</li><li>监测电解质、肝肾功能和肌酸激酶。</li></ul><span class="std">GB 5749—2022 五氯酚限值：0.009 mg/L</span>`],
+['鉴别诊断',`<ul><li><b>中暑：</b>有高温环境暴露，无毒物接触史。</li><li><b>有机磷中毒：</b>瞳孔缩小、胆碱酯酶下降；五氯酚中毒瞳孔不缩小，以高热为主。</li><li><b>感染性发热：</b>起病相对缓慢，有感染灶和炎症指标升高。</li></ul>`],
+['救治要点',`<ul><li>无特效解毒剂，以对症支持为主。</li><li>迅速物理降温（冰敷、冰毯），积极补液纠正脱水和电解质紊乱。</li><li><b>禁用阿托品：</b>阿托品抑制出汗，会进一步加重高热。</li><li>不宜使用水杨酸类退热药；皮肤污染者彻底清洗。</li></ul>`]]},
+
+{id:'cr6',name:'六价铬',alias:'铬酸盐、重铬酸盐，电镀和制革废水、铬渣渗滤液',signs:['yellowmouth','gi','kidney'],
+chips:['口咽黄色腐蚀灼伤','呕吐腹痛、吞咽困难','急性肾损伤'],
+key:['误服后数分钟至数小时出现恶心、呕吐、腹痛、吞咽困难','口腔、咽喉黏膜可见黄色斑或腐蚀；高浓度污染的水本身可呈淡黄色','严重者发绀、呼吸困难；婴儿可呈脑炎表现（惊厥、昏迷、瞳孔扩大）'],
+src:'电镀、制革鞣制、颜料和铬盐生产废水；铬渣非法倾倒或堆场渗滤液污染地下水和水库。',
+mech:'六价铬氧化性和腐蚀性强，易穿过细胞膜，在细胞内还原为三价铬时造成氧化损伤，主要损害消化道黏膜、肾小管和肝脏。六价铬化合物是已确认的人类致癌物。',
+tabs:[
+['临床表现',`<ul><li>误服后数分钟至数小时出现恶心、呕吐、腹痛、吞咽困难，可有消化道出血。</li><li>严重者发绀、呼吸困难；可出现少尿、无尿（急性肾小管坏死）、肝损害和溶血。</li><li>婴儿可呈脑炎表现：惊厥、昏迷、瞳孔扩大。</li></ul>`],
+['检验分析',`<ul><li>血铬、尿铬测定；尿常规和肾功能（尿蛋白、肌酐）。</li><li>水样用二苯碳酰二肼分光光度法测定六价铬（显紫红色）。</li></ul><span class="std">GB 5749—2022 铬（六价）限值：0.05 mg/L</span>`],
+['鉴别诊断',`<ul><li><b>强酸、强碱腐蚀：</b>有明确误服史，腐蚀更重，无黄色斑。</li><li><b>砷中毒：</b>无黏膜腐蚀，后期有周围神经病。</li><li><b>急性胃肠炎：</b>无腐蚀表现，无肾损伤。</li></ul>`],
+['救治要点',`<ul><li>尽早口服或静脉大剂量维生素C，将六价铬还原为低毒的三价铬。</li><li>谨慎洗胃，有消化道穿孔风险者禁止洗胃。</li><li>保护肾功能，必要时血液净化；皮肤接触者用大量清水冲洗。</li></ul>`]]}
+],
+after:`<h2>六种化学毒物鉴别速览</h2><div class="tbl-wrap"><table><tr><th>毒物</th><th>特征体征</th><th>关键检验</th><th>特效或关键处理</th></tr>
+<tr><td>砷化物</td><td>剧烈吐泻、口中金属味；1～3周后周围神经病</td><td>尿砷、发砷</td><td>二巯丙磺钠</td></tr>
+<tr><td>氰化物</td><td>苦杏仁味、皮肤鲜红、骤死</td><td>尿硫氰酸盐、血乳酸</td><td>亚硝酸钠—硫代硫酸钠</td></tr>
+<tr><td>有机磷</td><td>瞳孔缩小、大汗、肌颤</td><td>全血胆碱酯酶</td><td>阿托品＋氯解磷定</td></tr>
+<tr><td>亚硝酸盐</td><td>青紫、吸氧不缓解</td><td>高铁血红蛋白</td><td>小剂量亚甲蓝</td></tr>
+<tr><td>五氯酚</td><td>高热、大汗、烦渴</td><td>血、尿五氯酚</td><td>物理降温，禁用阿托品</td></tr>
+<tr><td>六价铬</td><td>消化道腐蚀、肾损伤</td><td>血、尿铬，肾功能</td><td>大剂量维生素C</td></tr></table></div>`,
+case:{title:'暴雨过后的蓄水池',meta:'教学案例（情景改编）',
+story:`<p>七月的一个下午，山脚下的桃园村刚下过一场雷阵雨。村里四十多户人家共用一座半山腰的蓄水池，水从山溪引来，经简单过滤后流进各家水管。</p><p>傍晚六点，村医老杨的诊所里一下子挤进来十几个人。最先来的是七十岁的何大爷，他满头大汗，衬衣湿透，嘴角不停流口水，说话时手臂上的肌肉一跳一跳的。老杨翻开他的眼睑，发现瞳孔小得像针尖。紧接着又来了三个孩子，都说肚子疼、想吐、眼睛看不清。</p><p>有村民想起来，中午果园里有人在蓄水池上游的溪沟边配药、冲洗药桶，"那味道冲得很，像大蒜"。晚上九点，发病人数增加到31人，全部来自用蓄水池水的家庭。</p>`,
+ask:['你首先考虑哪一类毒物？请说出至少三条依据。','应采集哪些样本、检测哪些项目来证实？','对何大爷这样的重症患者，特效救治方案是什么？'],
+ans:`<p><b>1. 有机磷农药中毒。</b>依据：共同水源（同一蓄水池）、潜伏期短（数小时）、上游有配药和洗药桶行为；临床出现瞳孔针尖样缩小、大汗流涎、肌束震颤的M样和N样症状，并有大蒜样气味。</p><p><b>2. 采样与检测：</b>患者全血胆碱酯酶活力（判断分级）；蓄水池水、溪沟水和患者呕吐物的有机磷农药定性定量；同时采集未发病家庭的水样作对照。</p><p><b>3. 救治：</b>彻底清除毒物后，早期、足量、反复使用阿托品至阿托品化，联合氯解磷定；密切观察中间综合征和迟发性神经病。</p>`},
+quiz:[
+{q:'患者饮用井水后口唇青紫，吸氧后无改善，抽出的静脉血呈巧克力色。最可能的毒物是？',o:['一氧化碳','亚硝酸盐','氰化物','砷化物'],a:1,e:'发绀＋吸氧不缓解＋巧克力色血液是高铁血红蛋白血症的典型表现，首先考虑亚硝酸盐。'},
+{q:'氰化物中毒时皮肤黏膜呈鲜红色，原因是？',o:['形成大量碳氧血红蛋白','组织不能利用氧，静脉血氧含量升高','高铁血红蛋白增多','毛细血管广泛扩张'],a:1,e:'氰离子抑制细胞色素氧化酶，细胞"有氧用不了"，静脉血仍含大量氧合血红蛋白，故呈鲜红色。'},
+{q:'五氯酚钠中毒高热患者，下列哪项处理是错误的？',o:['冰毯物理降温','静脉补液','使用阿托品减少分泌','纠正电解质紊乱'],a:2,e:'阿托品抑制出汗，阻碍散热，会加重五氯酚中毒的高热，属禁忌。'},
+{q:'有机磷重度中毒时，全血胆碱酯酶活力一般为？',o:['70%～90%','50%～70%','30%～50%','低于30%'],a:3,e:'轻度50%～70%，中度30%～50%，重度低于30%。'}
+]};
+
+PAGES.water_bio={cat:'water',title:'生活饮用水：生物性污染物',
+lead:'水源被粪便、生活污水污染后，可引起肠道传染病的水型暴发。与化学性中毒相比，它的潜伏期以天计，并且可能出现人传人的续发病例。',
+intro:`<div class="note"><p><b>水型暴发的流行病学特点</b></p><ul><li>病例分布与供水范围一致，大多数患者有饮用同一水源的历史；</li><li>除哺乳婴儿外，发病无明显年龄、性别、职业差异；</li><li>一次大量污染时病例集中、呈暴发；水源经常受污染时病例终年不断、呈散发或流行；</li><li>停用污染水源或采取净化消毒措施后，暴发或流行即可平息。</li></ul></div>`,
+toxins:[
+{id:'cholera',name:'霍乱',alias:'霍乱弧菌，甲类传染病',signs:['ricewater','gi','shock'],
+chips:['先泻后吐、无腹痛','米泔水样便','迅速脱水'],
+key:['吐泻症状突出，常先泻后吐，多无腹痛、无里急后重，一般不发热','粪便呈米泔水样，每日十余次至数十次','粪便培养霍乱弧菌阳性；潜伏期1～3天'],
+src:'粪—口传播。病人和带菌者粪便污染水源是暴发的主要原因，也可经污染的海产品、食物传播。',
+mech:'霍乱弧菌在小肠繁殖并产生霍乱肠毒素，使肠黏膜细胞大量分泌水和电解质，引起剧烈的分泌性腹泻。',
+tabs:[
+['临床表现',`<ul><li><b>泻吐期：</b>无痛性剧烈腹泻，米泔水样或洗肉水样便，呕吐多为喷射状。</li><li><b>脱水期：</b>皮肤干瘪、眼窝深陷、声音嘶哑、腓肠肌痉挛、少尿，可发展为循环衰竭。</li><li><b>恢复期：</b>少数可有反应性低热。</li></ul>`],
+['检验分析',`<ul><li>粪便培养霍乱弧菌阳性是确诊依据（碱性蛋白胨水增菌后接种TCBS平板）。</li><li>粪便悬滴镜检见穿梭样运动的弧菌，制动试验阳性，可作快速诊断。</li><li>PCR快速检测霍乱毒素基因。</li></ul>`],
+['鉴别诊断',`<ul><li><b>砷中毒：</b>潜伏期短，伴腹痛和口中金属味，尿砷升高。</li><li><b>细菌性食物中毒：</b>多先吐后泻，有腹痛、发热，与特定食物相关。</li></ul>`],
+['处置要点',`<ul><li>甲类传染病，<b>2小时内</b>网络直报。</li><li>病例隔离治疗，补液是救治关键（口服补液盐或静脉补液），可用多西环素、环丙沙星等。</li><li>划定疫点、疫区，密切接触者医学观察5天并预防服药；饮用水、粪便和环境严格消毒。</li></ul>`]]},
+
+{id:'typhoid',name:'伤寒和副伤寒',alias:'伤寒沙门菌、副伤寒甲乙丙沙门菌，乙类传染病',signs:['fever','rose'],
+chips:['持续发热','相对缓脉','玫瑰疹'],
+key:['持续发热（稽留热），相对缓脉，神情淡漠','肝大，胸腹部玫瑰疹，白细胞减少','潜伏期10～14天'],
+src:'粪—口传播，水源和食物污染可致暴发。慢性带菌者（尤其从事饮食服务者）是重要传染源。',
+mech:'细菌经肠道淋巴组织侵入血流，形成菌血症，并在肝、脾、骨髓等处繁殖；肠道集合淋巴结病变可致肠出血、肠穿孔。',
+tabs:[
+['临床表现',`<ul><li>起病缓慢，体温阶梯式上升，第2周起呈稽留热。</li><li>相对缓脉（体温高而脉搏不相应加快），表情淡漠、反应迟钝。</li><li>病程6～10天在胸腹部出现淡红色玫瑰疹，压之褪色；肝脾大。</li><li>病程第2～3周可并发肠出血、肠穿孔。</li></ul>`],
+['检验分析',`<ul><li>白细胞减少，嗜酸性粒细胞减少或消失。</li><li>血培养：病程第1周阳性率最高；骨髓培养阳性率更高，受抗菌药物影响小。</li><li><b>肥达试验：</b>"O"抗体 ≥1:80，"H""A""B""C"抗体 ≥1:160，有辅助诊断价值，恢复期效价4倍升高意义更大。</li></ul>`],
+['鉴别诊断',`<ul><li><b>病毒性上呼吸道感染：</b>病程短，无玫瑰疹和相对缓脉。</li><li><b>疟疾：</b>周期性寒战高热，血涂片查见疟原虫。</li><li><b>军团菌病：</b>也可有相对缓脉，但以肺炎为主。</li></ul>`],
+['处置要点',`<ul><li>乙类传染病，<b>24小时内</b>网络直报。</li><li>抗菌治疗可用喹诺酮类或第三代头孢菌素；给予少渣饮食，避免诱发肠穿孔。</li><li>查找并管理慢性带菌者，调离饮食服务岗位。</li></ul>`]]},
+
+{id:'shigella',name:'细菌性痢疾',alias:'志贺菌，乙类传染病',signs:['bloody','gi'],
+chips:['发热腹痛','里急后重','脓血便'],
+key:['急性腹泻，伴发热、腹痛、里急后重，脓血便或黏液便','粪便镜检白细胞 ≥15个/高倍视野','潜伏期1～2天'],
+src:'粪—口传播，水型和食物型暴发多见于夏秋季。少量细菌（10～100个）即可致病，易在集体单位中传播。',
+mech:'志贺菌侵入结肠黏膜上皮细胞并繁殖，引起黏膜炎症、溃疡和渗出；部分菌型产生志贺毒素。',
+tabs:[
+['临床表现',`<ul><li>急性起病，发热、腹痛（左下腹为主）、腹泻，里急后重，黏液脓血便。</li><li><b>中毒型菌痢：</b>多见于2～7岁儿童，起病急骤，高热、惊厥、休克或呼吸衰竭，而肠道症状轻甚至缺如，病死率高。</li></ul>`],
+['检验分析',`<ul><li>粪便镜检白细胞 ≥15个/高倍视野，可见红细胞和吞噬细胞。</li><li>粪便培养志贺菌阳性为确诊依据，并做药敏试验。</li></ul>`],
+['鉴别诊断',`<ul><li><b>阿米巴痢疾：</b>果酱样便，腥臭，发热轻，镜检可见阿米巴滋养体。</li><li><b>诺如病毒胃肠炎：</b>水样便，以呕吐为主，粪便镜检白细胞不多。</li></ul>`],
+['处置要点',`<ul><li>乙类传染病，<b>24小时内</b>网络直报。</li><li>病例隔离至症状消失、粪便培养连续2次阴性；根据药敏选择抗菌药物（志贺菌耐药问题突出）。</li><li>饮用水消毒，粪便管理，加强手卫生。</li></ul>`]]},
+
+{id:'hepatitis',name:'病毒性肝炎（甲型、戊型）',alias:'甲型肝炎病毒、戊型肝炎病毒，乙类传染病',signs:['jaundice'],
+chips:['厌油乏力','巩膜黄染、茶色尿','潜伏期长'],
+key:['食欲减退、恶心、厌油、乏力，巩膜黄染，茶色尿，肝大，肝区痛','血清ALT升高，抗-HAV IgM或抗-HEV IgM阳性','潜伏期：甲肝15～45天，戊肝10～60天'],
+src:'粪—口传播。由于潜伏期长，暴发时往往污染已过去数周，追溯暴露需回顾较长时间段。戊肝可引起大规模水型流行，1986—1988年新疆南部的戊肝水型流行波及约12万人。',
+mech:'病毒经肠道进入血液，在肝细胞内复制，通过免疫反应造成肝细胞损伤。',
+tabs:[
+['临床表现',`<ul><li>急性黄疸型：先有发热、乏力、食欲减退、厌油等前驱症状，随后出现巩膜、皮肤黄染，尿色如浓茶。</li><li>甲肝儿童多为隐性或无黄疸型感染，成人症状更重。</li><li>戊肝在孕妇（尤其妊娠晚期）中重症比例高，病死率明显升高，是重点保护人群。</li></ul>`],
+['检验分析',`<ul><li>血清ALT明显升高，胆红素升高。</li><li>抗-HAV IgM阳性诊断急性甲肝；抗-HEV IgM阳性诊断急性戊肝。</li></ul>`],
+['鉴别诊断',`<ul><li><b>中毒性肝病：</b>如砷中毒、毒蕈中毒，有毒物接触史，潜伏期短。</li><li><b>乙型、丙型肝炎：</b>经血液、性和母婴传播，不形成水型暴发。</li></ul>`],
+['处置要点',`<ul><li>乙类传染病，<b>24小时内</b>网络直报。</li><li>以休息、营养和对症治疗为主，避免使用损肝药物；孕妇病例应密切监护。</li><li>密切接触者可应急接种甲肝疫苗；我国已有戊肝疫苗上市，可用于高危人群。</li></ul>`]]},
+
+{id:'rotavirus',name:'轮状病毒胃肠炎',alias:'轮状病毒，丙类传染病（其他感染性腹泻）',signs:['gi'],
+chips:['突然发病','黄水样便','婴幼儿多见'],
+key:['突然发病，无发热或低热','黄水样便，呈喷射性，每天10次左右','潜伏期2～3天'],
+src:'粪—口传播，A组轮状病毒主要感染6～24月龄婴幼儿，秋冬季多发（"秋季腹泻"）；B组轮状病毒可引起成人腹泻，曾在我国造成水型暴发。',
+mech:'病毒感染小肠绒毛上皮细胞，使吸收功能下降，并通过肠毒素样蛋白引起分泌增加，导致水样腹泻。',
+tabs:[
+['临床表现',`<ul><li>突然发病，常先有呕吐，随后出现黄水样或蛋花汤样便。</li><li>婴幼儿易发生脱水和电解质紊乱；病程一般5～7天。</li></ul>`],
+['检验分析',`<ul><li>粪便轮状病毒抗原检测（胶体金、ELISA）；RT-PCR检测病毒核酸并分型。</li></ul>`],
+['鉴别诊断',`<ul><li><b>诺如病毒：</b>潜伏期更短（12～48小时），病程1～3天，学龄儿童和成人中暴发更常见。</li><li><b>细菌性痢疾：</b>有脓血便和里急后重。</li></ul>`],
+['处置要点',`<ul><li>以补液为主，无特效抗病毒药物；接种轮状病毒疫苗可有效预防婴幼儿重症。</li><li>托幼机构病例隔离，加强手卫生和环境消毒。</li></ul>`]]},
+
+{id:'norovirus',name:'诺如病毒胃肠炎',alias:'诺如病毒，丙类传染病（其他感染性腹泻）',signs:['vomitfirst','gi'],
+chips:['呕吐为突出首发症状','病程1～3天','学校托幼易聚集'],
+key:['潜伏期12～48小时，起病急，儿童以呕吐为主，成人以腹泻为主','常伴低热、腹痛、头痛和肌肉酸痛，病程1～3天自愈','是学校、托幼机构等集体单位感染性腹泻暴发最常见的病原'],
+src:'粪—口传播，也可经呕吐物形成的气溶胶传播。污染的二次供水、桶装水、自备井水和贝类食物是常见的暴发来源。少量病毒即可致病，环境中存活时间长。',
+mech:'病毒感染小肠上段黏膜，引起绒毛变短、吸收障碍，并延缓胃排空，故呕吐突出。',
+tabs:[
+['临床表现',`<ul><li>突发恶心、喷射性呕吐，水样腹泻每日数次至十余次，无脓血。</li><li>可有低热（37.5～38.5℃）、腹痛、头痛、肌痛。</li><li>病程短，一般1～3天自愈，老人和婴幼儿需警惕脱水。</li></ul>`],
+['检验分析',`<ul><li>采集发病48小时内病例的粪便或肛拭子、呕吐物，RT-PCR检测诺如病毒核酸并进行基因分型。</li><li>可疑水样需大体积浓缩后检测，并与病例毒株比对。</li></ul>`],
+['鉴别诊断',`<ul><li><b>金黄色葡萄球菌肠毒素食物中毒：</b>潜伏期1～6小时，病例集中在某一餐次之后。</li><li><b>细菌性痢疾：</b>发热明显、脓血便、里急后重。</li></ul>`],
+['处置要点',`<ul><li>1周内同一学校、托幼机构等集体单位发生20例及以上感染性腹泻，按突发公共卫生事件相关信息报告。</li><li>病例隔离至症状消失后72小时方可复课、复工。</li><li>呕吐物和污染环境使用含氯消毒剂，<b>75%酒精对诺如病毒效果差</b>。</li><li>流动水加肥皂洗手，含醇免洗洗手液不能替代。</li></ul>`]]}
+],
+after:`<h2>六种水源性传染病鉴别速览</h2><div class="tbl-wrap"><table><tr><th>疾病</th><th>潜伏期</th><th>典型表现</th><th>确诊检验</th><th>报告时限</th></tr>
+<tr><td>霍乱</td><td>1～3天</td><td>无痛性米泔水样腹泻，先泻后吐</td><td>粪便霍乱弧菌培养</td><td>2小时</td></tr>
+<tr><td>伤寒、副伤寒</td><td>10～14天</td><td>持续发热、相对缓脉、玫瑰疹</td><td>血、骨髓培养；肥达试验</td><td>24小时</td></tr>
+<tr><td>细菌性痢疾</td><td>1～2天</td><td>发热、里急后重、脓血便</td><td>粪便镜检、志贺菌培养</td><td>24小时</td></tr>
+<tr><td>甲肝、戊肝</td><td>15～45天、10～60天</td><td>厌油、黄疸、茶色尿</td><td>抗-HAV/HEV IgM</td><td>24小时</td></tr>
+<tr><td>轮状病毒</td><td>2～3天</td><td>婴幼儿黄水样便</td><td>粪便抗原、核酸</td><td>24小时</td></tr>
+<tr><td>诺如病毒</td><td>12～48小时</td><td>突发呕吐，1～3天自愈</td><td>粪便、呕吐物核酸</td><td>24小时</td></tr></table></div>`,
+case:{title:'退不下去的高烧',meta:'教学案例（情景改编）',
+story:`<p>八月，一场洪水退去后的第二周，清河镇的几家诊所接诊了越来越多"感冒发烧"的病人。他们烧了一周多，体温一天比一天高，输了几天液也不见好。</p><p>二十岁的大学生小林放暑假在家，已经烧到第九天。县医院的医生注意到一个奇怪的现象：他体温39.5℃，脉搏却只有每分钟88次；人显得很淡漠，问话半天才回答。掀开衣服，胸腹部有几个淡红色的小斑点，一压就褪。血常规显示白细胞3.2×10⁹/L。</p><p>县疾控把近一个月的发热病例在地图上标出来，发现它们大多集中在镇西片区。那里的居民用的是一口自备井，洪水期间井口曾被淹没了两天。</p>`,
+ask:['最可能的诊断是什么？哪些线索支持？','此时首选的病原学检查是什么？为什么？','除治疗病人外，还应采取哪些控制措施？'],
+ans:`<p><b>1. 伤寒。</b>持续发热超过1周、相对缓脉、表情淡漠、玫瑰疹、白细胞减少，加上病例集中在洪水淹没过的自备井供水片区，符合伤寒水型流行。</p><p><b>2. 血培养</b>（必要时骨髓培养）。病程第1～2周血培养阳性率较高，可获得菌株并做药敏；肥达试验可作辅助，最好检测双份血清。</p><p><b>3. 控制措施：</b>停用自备井，改用安全水源并加强消毒；24小时内网络直报；病例隔离治疗，主动搜索病例；排查带菌者，加强粪便管理和健康教育。</p>`},
+quiz:[
+{q:'粪便呈米泔水样、无腹痛、先泻后吐、一般不发热，应首先考虑？',o:['细菌性痢疾','霍乱','轮状病毒胃肠炎','砷中毒'],a:1,e:'无痛性米泔水样腹泻、先泻后吐、多不发热是霍乱的典型表现；霍乱为甲类传染病，须2小时内报告。'},
+{q:'戊型肝炎水型流行中，重症比例和病死率最高的人群是？',o:['学龄儿童','青壮年男性','妊娠晚期孕妇','哺乳期婴儿'],a:2,e:'戊肝在孕妇尤其妊娠晚期中易发展为重症，是水型流行时的重点保护对象。'},
+{q:'关于水型暴发的特点，下列说法错误的是？',o:['病例分布与供水范围一致','停用污染水源后暴发迅速平息','病例多集中于某一年龄组','一次大量污染时病例集中出现'],a:2,e:'除哺乳婴儿外，水型暴发无明显年龄、性别、职业差异——所有喝了这口水的人都可能发病。'},
+{q:'处理诺如病毒病例的呕吐物，应选用？',o:['75%酒精','含氯消毒剂','清水擦拭','季铵盐类消毒剂'],a:1,e:'诺如病毒为无包膜病毒，对酒精和季铵盐不敏感，应使用高浓度含氯消毒剂覆盖呕吐物后再清理。'}
+]};
+
+PAGES.water_eutro={cat:'water',title:'生活饮用水：水体富营养化',
+lead:'氮、磷等营养物富集，引起藻类异常繁殖、水体透明度下降、水质恶化。它对健康的威胁既来自藻毒素，也来自水厂处理后产生的消毒副产物和嗅味问题。',
+intro:`<h2>发生过程</h2><ol><li><b>营养物输入：</b>农业化肥流失、生活污水、畜禽养殖废水、工业废水将氮、磷带入湖泊、水库等水流缓慢的水体。</li><li><b>藻类暴发：</b>水温升高、光照充足时，蓝藻等藻类大量繁殖。淡水中称"水华"，海洋中称"赤潮"。</li><li><b>水质恶化：</b>透明度下降，藻类死亡分解消耗溶解氧，产生异味和藻毒素，鱼类死亡。</li></ol>
+<h2>识别要点</h2><div class="tox" style="--c:var(--water)"><div class="tox-key" style="margin-top:16px"><h4>感官识别</h4><ul><li>居民可闻到<b>泥土臭味、霉腐臭味、鱼腥臭味、青草味</b>，自来水出现异味是最早、最常见的投诉。</li><li>泥土和霉味主要来自藻类代谢产生的土臭素和2-甲基异莰醇，浓度极低时即可被闻到。</li><li>水源水面呈绿色"油漆状"或带状漂浮物，藻类聚集处颜色明显加深。</li></ul></div></div>
+<h2>健康危害</h2><div class="tbl-wrap"><table><tr><th>危害来源</th><th>主要物质</th><th>健康影响</th></tr>
+<tr><td>藻毒素</td><td>微囊藻毒素（以MC-LR毒性最强）</td><td>主要损害肝脏；接触可致皮肤瘙痒、皮疹和眼刺激，饮入可致恶心、呕吐、腹泻。流行病学研究提示长期饮用含藻毒素的水与原发性肝癌发病有关。</td></tr>
+<tr><td>神经毒素</td><td>鱼腥藻毒素等</td><td>可引起肌肉震颤、呼吸麻痹，主要见于动物饮用水华水体后死亡。</td></tr>
+<tr><td>消毒副产物</td><td>三氯甲烷等三卤甲烷、卤乙酸</td><td>藻类有机物是消毒副产物的前体物，加氯消毒后生成量增加，具有潜在致癌、致突变性。</td></tr>
+<tr><td>嗅味物质</td><td>土臭素、2-甲基异莰醇</td><td>本身毒性低，但严重影响饮水感官，是引发公众恐慌和舆情的主要原因。</td></tr></table></div><span class="std">GB 5749—2022 微囊藻毒素-LR限值：0.001 mg/L</span>
+<h2>环境监测</h2><div class="tbl-wrap"><table><tr><th>样本</th><th>检测项目</th><th>目的</th></tr>
+<tr><td>水源水</td><td>总磷、总氮、叶绿素a、藻毒素、Ames试验</td><td>判断富营养化程度、藻类生物量和毒性</td></tr>
+<tr><td>出厂水、末梢水</td><td>游离余氯、氯酚、三氯甲烷、Ames试验</td><td>评价水厂处理效果和消毒副产物风险</td></tr></table></div>
+<div class="note lab"><p><b>为什么要做Ames试验？</b>Ames试验利用组氨酸缺陷型鼠伤寒沙门菌检测样本的致突变性。富营养化水体中藻毒素和消毒副产物种类多、成分复杂，逐一测定困难，Ames试验可以对水样的"综合遗传毒性"做出整体评价。</p></div>
+<h2>应急处置</h2><ul><li><b>加密监测：</b>在取水口加密监测藻密度、叶绿素a、藻毒素和嗅味物质。</li><li><b>强化水厂处理：</b>高锰酸钾预氧化，投加粉末活性炭吸附嗅味物质和藻毒素，强化混凝沉淀。</li><li><b>慎用预氯化：</b>高剂量预加氯会使藻细胞破裂、释放胞内毒素，并增加消毒副产物。</li><li><b>保障供水：</b>必要时调整取水口位置或启用备用水源；及时、如实向公众通报水质情况。</li><li><b>长远治理：</b>控制入湖氮磷，截污纳管，治理农业面源污染。</li></ul>`,
+case:{title:'自来水里的"霉味"',meta:'真实事件回顾（概要）',
+story:`<p>2007年5月下旬，太湖蓝藻大面积暴发。几天之内，无锡不少市民发现家里的自来水有一股刺鼻的腥臭和霉味，烧开以后也去不掉。</p><p>担心"水有毒"的市民涌进超市抢购桶装水和纯净水，部分超市货架被一扫而空。原因是水厂取水口附近聚集了大量蓝藻，藻类死亡腐败后产生的嗅味物质随原水进入水厂，常规工艺难以去除。</p><p>事件发生后，当地采取引江水稀释、在水厂投加高锰酸钾和活性炭、调整取水口等措施，自来水嗅味逐步消除。这起事件此后推动了太湖流域水环境的系统治理。</p>`,
+ask:['从公共卫生角度看，这起事件的主要健康风险有哪些？','如果水厂为"杀藻除味"而大幅提高预加氯量，可能带来什么问题？','面对市民抢水的恐慌，卫生部门应如何开展风险沟通？'],
+ans:`<p><b>1. 健康风险：</b>藻毒素（尤其微囊藻毒素）的肝毒性；加氯后消毒副产物增加；嗅味导致饮水安全感下降、公众改饮来源不明的水，也是间接风险。</p><p><b>2. 预氯化的问题：</b>藻细胞被氯破坏后释放胞内藻毒素；藻类有机物与氯反应生成更多三氯甲烷等消毒副产物；对土臭素等嗅味物质去除效果也有限。</p><p><b>3. 风险沟通：</b>及时公布水源和出厂水、末梢水的检测结果，说明嗅味物质与藻毒素的区别；明确告诉公众哪些用途安全、哪些需暂停；发布应急供水点信息，保持信息更新，避免谣言扩散。</p>`},
+quiz:[
+{q:'富营养化水体中，使自来水产生泥土味、霉味的主要物质是？',o:['微囊藻毒素','土臭素和2-甲基异莰醇','三氯甲烷','硫化氢'],a:1,e:'土臭素和2-甲基异莰醇是蓝藻和放线菌的代谢产物，嗅阈值极低，是土霉味的主要来源。'},
+{q:'微囊藻毒素主要损害的器官是？',o:['肾脏','神经系统','肝脏','造血系统'],a:2,e:'微囊藻毒素是肝毒素，可抑制肝细胞内的蛋白磷酸酶，造成肝损伤并具有促癌作用。'},
+{q:'富营养化期间要监测出厂水的三氯甲烷，主要原因是？',o:['三氯甲烷来自工业污染','藻类有机物是消毒副产物的前体物','三氯甲烷是藻毒素的分解产物','用于判断藻类密度'],a:1,e:'藻类及其分泌物增加了水中有机物，加氯消毒时会生成更多三氯甲烷等消毒副产物。'}
+]};
+
+PAGES.air_chem={cat:'air',title:'大气污染：化学性有害气体',
+lead:'有害气体中毒的最大特点是"同一空间、同一时间、多人发病"。判断时先看现场：有没有燃烧源、化学品、密闭或有限空间，再看气味、颜色和受害者的分布位置。',
+intro:`<div class="note alert"><p><b>救人先护己。</b>进入可能存在有毒气体的现场前，必须佩戴合适的呼吸防护，先通风、再检测。气体中毒事故中，未经防护的施救者常常成为新的受害者。</p></div>`,
+toxins:[
+{id:'co',name:'一氧化碳（CO）',alias:'燃煤取暖、燃气热水器、炭火、密闭车库、火灾',signs:['cherry','headache','coma'],
+chips:['同室多人头痛','重度樱桃红','迟发性脑病'],
+key:['缺氧、头痛、眩晕，同一房间的人同时发病，离开现场后症状减轻','重度中毒时面色呈樱桃红色，深度昏迷；但樱桃红色在临床上并不常见，没有樱桃红不能排除CO中毒','部分患者意识恢复后经2～60天"假愈期"，出现迟发性脑病'],
+src:'冬季燃煤取暖、炭火锅、燃气热水器安装在浴室内且通风不良；汽车在密闭车库内长时间发动；火灾烟气。CO无色、无味、无刺激性，人很难察觉。',
+mech:'CO与血红蛋白的亲和力约为氧的240倍，形成碳氧血红蛋白（HbCO），使血液失去携氧能力；同时使氧离曲线左移，组织更难获得氧。脑和心脏对缺氧最敏感，损伤最重。',
+tabs:[
+['临床表现',`<div class="tbl-wrap"><table><tr><th>程度</th><th>表现</th></tr><tr><td>轻度</td><td>头痛、头晕、恶心、呕吐、乏力、心悸</td></tr><tr><td>中度</td><td>意识模糊或浅昏迷，口唇黏膜樱桃红色</td></tr><tr><td>重度</td><td>深昏迷、抽搐、休克、脑水肿、呼吸衰竭，可伴心肌损害</td></tr></table></div><p><b>迟发性脑病：</b>经过数天至2个月的"假愈期"后，出现痴呆、精神异常、帕金森综合征、偏瘫等，是CO中毒最需要随访的后遗症。</p>`],
+['检验分析',`<div class="tbl-wrap"><table><tr><th>程度</th><th class="num">血HbCO</th></tr><tr><td>轻度</td><td class="num">&gt;10%</td></tr><tr><td>中度</td><td class="num">&gt;30%</td></tr><tr><td>重度</td><td class="num">&gt;50%</td></tr></table></div><ul><li>脱离现场、吸氧后HbCO迅速下降，应尽早采血；吸烟者HbCO基础值可达5%～10%。</li><li>现场用CO检测仪测定空气浓度，并检查燃具、烟道。</li></ul>`],
+['鉴别诊断',`<ul><li><b>脑血管意外：</b>多为单人发病，有神经定位体征，无同室多人发病。</li><li><b>细菌性食物中毒：</b>也可多人头晕呕吐，但与共同餐次相关，无燃烧源。</li><li><b>氰化物中毒：</b>皮肤鲜红，苦杏仁味，进展更快。</li></ul>`],
+['救治要点',`<ul><li>立即开窗通风，将患者移至空气新鲜处；施救者进入现场不要开关电器、不用明火。</li><li>吸氧，中、重度中毒者尽早高压氧治疗。</li><li>防治脑水肿，必要时机械通气。</li><li>出院后至少随访2个月，警惕迟发性脑病。</li></ul>`]]},
+
+{id:'hcho',name:'甲醛',alias:'装修人造板材、胶黏剂，甲醛熏蒸消毒',signs:['eye','pungent','cough'],
+chips:['眼部烧灼、大量流泪','鼻痒喷嚏','新装修环境'],
+key:['眼部烧灼感，大量流泪，鼻痒，打喷嚏','浓度≥12 mg/m³时引起眼结膜炎、鼻炎、咽喉严重灼伤','多见于新装修的教室、宿舍、办公场所，或甲醛熏蒸消毒后未充分通风'],
+src:'人造板材、胶黏剂、涂料持续释放；医院、实验室用甲醛熏蒸消毒；工业泄漏。甲醛是已确认的人类致癌物，长期暴露与鼻咽癌和白血病有关。',
+mech:'甲醛化学性质活泼，可与蛋白质、核酸结合，对眼和呼吸道黏膜有强烈刺激作用，并具有致敏性。',
+tabs:[
+['临床表现',`<ul><li>低浓度：眼刺激、流泪、鼻痒、咽干、咳嗽。</li><li>高浓度：结膜炎、角膜炎、鼻炎、咽喉灼伤，严重时喉头水肿、肺水肿。</li><li>致敏：可诱发哮喘、过敏性皮炎，少数人对极低浓度也有反应。</li></ul>`],
+['检验分析',`<ul><li>室内空气甲醛采用酚试剂分光光度法测定；电化学检测仪仅可作现场筛查。</li><li>采样前门窗应关闭12小时，以反映真实浓度。</li></ul><span class="std">GB/T 18883—2022 室内空气甲醛：≤0.08 mg/m³（1小时均值）</span>`],
+['鉴别诊断',`<ul><li><b>病毒性上呼吸道感染：</b>有发热，离开环境后症状不消失。</li><li><b>氯气、氨气：</b>刺激更剧烈，常有明确泄漏事件。</li></ul>`],
+['救治要点',`<ul><li>立即脱离现场，加强通风；眼部用清水冲洗。</li><li>对症治疗；有喉头水肿、肺水肿征象者及时处理。</li><li>新装修场所检测合格后再使用，学校、托幼机构尤应重视。</li></ul>`]]},
+
+{id:'nh3',name:'氨气',alias:'液氨制冷（冷库）、化肥化工、运输罐车泄漏',signs:['eye','pungent','cough','edema'],
+chips:['强烈刺鼻氨味','眼和上呼吸道剧烈刺激','溶解性坏死'],
+key:['缺氧、嗜睡、昏迷，伴有肺水肿','皮肤黏膜脱水，组织溶解性坏死','重度可见眼结膜、鼻黏膜充血水肿、糜烂'],
+src:'冷库和食品加工厂的液氨制冷系统，化肥、化工企业，液氨运输罐车。氨无色、有强烈刺激性臭味，比空气轻，泄漏后向上扩散。',
+mech:'氨极易溶于水，在黏膜表面形成氢氧化铵，呈强碱性，使组织蛋白溶解、脂肪皂化，造成"溶解性坏死"——比酸烧伤渗透更深。液氨接触皮肤还可引起冻伤。',
+tabs:[
+['临床表现',`<ul><li>轻度：流泪、畏光、咽痛、呛咳、胸闷。</li><li>中度：声音嘶哑、呼吸困难，眼结膜、鼻黏膜充血水肿。</li><li>重度：喉头水肿或痉挛致窒息，肺水肿，休克；角膜溃疡甚至穿孔。</li></ul>`],
+['检验分析',`<ul><li>现场氨浓度检测；胸部X线或CT评估肺水肿。</li><li>血气分析判断缺氧程度。</li></ul>`],
+['鉴别诊断',`<ul><li><b>氯气：</b>黄绿色、比空气重，积聚在低处，以下呼吸道损伤更明显。</li><li><b>甲醛：</b>浓度一般较低，以眼和鼻刺激为主。</li></ul>`],
+['救治要点',`<ul><li>撤离至上风向，脱去污染衣物。</li><li>眼睛和皮肤用大量流动清水冲洗至少15分钟。</li><li>保持呼吸道通畅，喉头水肿严重者及时气管切开；早期、足量、短程使用糖皮质激素防治肺水肿。</li></ul>`]]},
+
+{id:'cl2',name:'氯气',alias:'水厂和泳池加氯、化工企业、消毒剂混用',signs:['eye','pungent','cough','edema'],
+chips:['黄绿色刺激性气体','胸闷呛咳、窒息感','比空气重，积聚低处'],
+key:['胸闷、气短，咳嗽、咯血，窒息感，烦躁不安','喉头痉挛，肺水肿','家庭和学校常见原因："84"消毒液（次氯酸钠）与洁厕灵（盐酸）混用'],
+src:'自来水厂、游泳池加氯设备泄漏；化工企业事故；清洁时将含氯消毒剂与酸性清洁剂混用。氯气呈黄绿色，比空气重约2.5倍，会沉积在地下室、低洼处。',
+mech:'氯气溶于黏膜表面水分，生成盐酸和次氯酸，对呼吸道全程造成化学性损伤，严重时引起化学性肺炎和肺水肿。',
+tabs:[
+['临床表现',`<ul><li>轻度：眼和上呼吸道刺激，流泪、咽痛、呛咳。</li><li>中重度：胸闷、气短、咳嗽、咯血，窒息感，烦躁不安，喉头痉挛，肺水肿。</li><li>极高浓度可致声门痉挛，反射性心跳骤停。</li><li>有哮喘病史者症状明显加重。</li></ul><div class="note small"><p>原教材在此列有"氯痤疮"。需要说明：氯痤疮主要见于长期接触多氯芳烃（如二噁英、多氯联苯）；急性氯气中毒以呼吸道损伤为主。</p></div>`],
+['检验分析',`<ul><li>现场氯气浓度检测。</li><li>胸部影像和血气分析评估肺损伤；由于肺水肿可迟发，应动态复查。</li></ul>`],
+['鉴别诊断',`<ul><li><b>氨气：</b>无色、比空气轻，刺激以上呼吸道和眼为主。</li><li><b>硫化氢：</b>臭鸡蛋味，以中枢神经和细胞窒息为主。</li></ul>`],
+['救治要点',`<ul><li>撤离至<b>上风向、地势较高处</b>，静卧保暖、减少活动。</li><li>吸氧，可用5%碳酸氢钠雾化吸入；防治肺水肿。</li><li>即使症状轻微，也应留观24～48小时，警惕迟发性肺水肿。</li></ul>`]]},
+
+{id:'pesticide',name:'消毒杀虫剂',alias:'拟除虫菊酯、有机磷和氨基甲酸酯类喷雾，室内大剂量喷洒',signs:['eye','tremor','headache'],
+chips:['面部发痒、烧灼感','头痛恶心','重症肌颤抽搐'],
+key:['头痛、恶心、呕吐，重症出现肌束震颤、抽搐及麻痹','局部表现为流泪、喷嚏、面部发痒','多见于室内集中灭蟑、灭蚊后未充分通风，或超量使用'],
+src:'学校、宿舍、食堂集中喷洒杀虫剂后过早进入；农药在居住区附近喷洒随风飘散；消毒剂超量使用。',
+mech:'拟除虫菊酯作用于神经细胞钠通道，引起神经兴奋性增高；有机磷和氨基甲酸酯类抑制胆碱酯酶。',
+tabs:[
+['临床表现',`<ul><li><b>拟除虫菊酯：</b>面部烧灼感、蚁走感、发痒，流泪、喷嚏；重者肌束震颤、抽搐、意识障碍。</li><li><b>有机磷、氨基甲酸酯类：</b>瞳孔缩小、多汗、流涎、肌颤，胆碱酯酶下降。</li></ul>`],
+['检验分析',`<ul><li>全血胆碱酯酶活力测定，区分有机磷类和拟除虫菊酯类。</li><li>采集喷洒药剂、空气样本进行成分鉴定。</li></ul>`],
+['鉴别诊断',`<ul><li><b>甲醛：</b>新装修环境，无喷洒史。</li><li><b>CO中毒：</b>有燃烧源，无黏膜刺激。</li></ul>`],
+['救治要点',`<ul><li>移至通风处，脱去污染衣物，用清水或肥皂水清洗皮肤。</li><li>有机磷类按有机磷中毒处理；拟除虫菊酯无特效解毒剂，以对症、控制抽搐为主。</li><li>喷洒后按说明书规定时间通风再进入。</li></ul>`]]},
+
+{id:'h2s',name:'硫化氢',alias:'化粪池、下水道、污水井、沼气池、腌制池，皮革造纸和石油化工',signs:['egg','eye','sudden','coma','edema'],
+chips:['低浓度臭鸡蛋味','高浓度嗅觉麻痹','有限空间接连倒下'],
+key:['低浓度时有明显臭鸡蛋味；浓度升高后嗅神经麻痹，"闻不到了"反而更危险','高浓度吸入可在数秒内"电击样"倒地死亡','典型场景：有限空间内一人倒下，施救者未加防护进入后接连倒下'],
+src:'含硫有机物在缺氧条件下腐败分解产生，常积聚在化粪池、窨井、沼气池、地窖等有限空间。硫化氢比空气重，在低处积聚。',
+mech:'与氰化物相似，硫化氢抑制细胞色素氧化酶，造成细胞内窒息；同时对眼和呼吸道黏膜有强烈刺激作用。高浓度时直接麻痹呼吸中枢。',
+tabs:[
+['临床表现',`<ul><li>轻度：眼刺痛、畏光、流泪（"气体眼"），咽痛、咳嗽、胸闷。</li><li>中度：头痛、头晕、意识障碍，肺水肿。</li><li>重度：昏迷、抽搐、呼吸心跳骤停；高浓度"电击样"死亡。</li><li>可伴心肌损害，部分患者遗留神经系统后遗症。</li></ul>`],
+['检验分析',`<ul><li>现场分层检测硫化氢、氧气、可燃气体和CO，是最关键的证据；通风后浓度会迅速下降，要尽早测量。</li><li>尽早采血检测硫化物；心电图、心肌酶、胸部影像评估脏器损伤。</li></ul><span class="std">GBZ 2.1 工作场所硫化氢最高容许浓度：10 mg/m³</span>`],
+['鉴别诊断',`<ul><li><b>单纯缺氧（甲烷、二氧化碳积聚）：</b>无臭鸡蛋味，无眼和呼吸道刺激。</li><li><b>CO中毒：</b>需有燃烧源，无刺激症状。</li><li><b>氰化物：</b>苦杏仁味，有接触氰化物的工艺。</li></ul>`],
+['救治要点',`<ul><li>施救者必须佩戴正压式空气呼吸器，系安全绳，有专人监护；未经防护严禁进入。</li><li>脱离后立即吸氧，心跳呼吸骤停者就地心肺复苏，避免口对口人工呼吸。</li><li>中、重度中毒尽早高压氧治疗，防治肺水肿和脑水肿。</li></ul>`]]}
+],
+after:`<h2>常见有害气体对照</h2><div class="tbl-wrap"><table><tr><th>气体</th><th>颜色与气味</th><th>与空气相比</th><th>主要损害</th><th>关键现场线索</th></tr>
+<tr><td>一氧化碳</td><td>无色无味</td><td>相近</td><td>血液携氧→脑、心</td><td>燃烧源＋密闭空间，同室多人</td></tr>
+<tr><td>甲醛</td><td>无色，刺激性</td><td>略重</td><td>眼、上呼吸道，致敏</td><td>新装修，熏蒸消毒</td></tr>
+<tr><td>氨气</td><td>无色，强烈刺鼻</td><td>轻</td><td>眼、上呼吸道，溶解性坏死</td><td>冷库、化肥厂</td></tr>
+<tr><td>氯气</td><td>黄绿色，刺激性</td><td>重</td><td>呼吸道全程，肺水肿</td><td>水厂泳池、消毒剂混用</td></tr>
+<tr><td>硫化氢</td><td>无色，臭鸡蛋味</td><td>重</td><td>细胞窒息＋黏膜刺激</td><td>有限空间，接连倒下</td></tr></table></div>
+<div class="note"><p><b>撤离方向口诀：</b>比空气重的氯气、硫化氢往<b>上风向的高处</b>撤；比空气轻的氨气同样往上风向撤，但要远离泄漏点上方。</p></div>`,
+case:{title:'迎检前的大扫除',meta:'教学案例（情景改编）',
+story:`<p>周四下午，为了迎接第二天的卫生检查，红星中学的保洁员把教学楼三楼男厕所彻底清洗了一遍。她先倒了半桶"84"消毒液泡地，觉得尿垢太顽固，又往小便池里倒了大半瓶洁厕灵。为了"让药效足一点"，她关上了厕所的窗户。</p><p>第三节课下课，初一（3）班的几个男生冲进厕所，没过一分钟就捂着鼻子跑了出来，一边咳嗽一边流眼泪。"像游泳池的味道，但呛得多，嗓子像被火烧。"陆续又有学生出来，有人蹲在走廊干呕。</p><p>班主任清点时发现，共有12名学生出现呛咳、流泪、胸闷。其中小周有哮喘病史，此刻正弯着腰大口喘气，嘴唇有些发紫。</p>`,
+ask:['厕所里产生了什么气体？它是怎么来的？','现场老师应当立即做什么？学生应往哪个方向疏散？','为什么症状较轻的学生也需要观察一段时间？'],
+ans:`<p><b>1. 氯气。</b>"84"消毒液的主要成分次氯酸钠与洁厕灵中的盐酸反应生成氯气；关窗使氯气在厕所内积聚，因其比空气重，低处浓度更高。</p><p><b>2. 现场处置：</b>立即封闭厕所，禁止入内；在不进入高浓度区域的前提下开窗通风；把学生带离到上风向、通风良好的开阔处，让其安静休息；拨打120，优先处置有哮喘发作、口唇发紫的小周；及时报告校领导和卫生健康部门。</p><p><b>3. 留观原因：</b>氯气可引起迟发性肺水肿，接触后数小时乃至24～48小时内才出现。轻症学生也要告知家长注意观察，出现胸闷、气促加重应立即就医。</p>`},
+quiz:[
+{q:'下列哪种情况最支持一氧化碳中毒？',o:['冬夜一家三口在关窗烧煤取暖的卧室内同时头痛、呕吐','聚餐后多人腹泻','进入新装修办公室后眼睛刺痛','下井作业时闻到臭鸡蛋味'],a:0,e:'燃烧源＋密闭空间＋同室多人同时发病，是CO中毒最典型的场景。'},
+{q:'氯气泄漏时，周边人员应向哪里撤离？',o:['下风向低洼处','上风向地势较高处','地下室','任意方向'],a:1,e:'氯气比空气重，在低处积聚；应向上风向、地势较高处撤离。'},
+{q:'窨井内有工人倒地，正确的救援方式是？',o:['立即下井拉人','用湿毛巾捂住口鼻下井','佩戴正压式空气呼吸器、系安全绳，在有人监护下施救，同时通风检测','向井内喷水后下井'],a:2,e:'有限空间事故中盲目施救常造成更多伤亡。必须有可靠的供气式呼吸防护，并做好通风、检测和监护。'},
+{q:'"84"消毒液与洁厕灵混用会产生？',o:['氨气','氯气','一氧化碳','甲醛'],a:1,e:'次氯酸钠与盐酸反应生成氯气，是家庭和学校清洁时最常见的氯气中毒原因。'}
+]};
+
+PAGES.air_bio={cat:'air',title:'大气污染：生物性及其他污染',
+lead:'空气中的病原微生物、花粉和生物气溶胶，也能引起群体性健康事件。其中最值得警惕的是与集中空调和热水系统相关的军团菌病。',
+intro:'',
+toxins:[
+{id:'legion',name:'军团病',alias:'嗜肺军团菌（以血清1型为主）',signs:['pneumonia','fever','gi'],
+chips:['与集中空调冷却塔相关','高热肺炎','β-内酰胺类无效'],
+key:['与集中式空调系统密切相关；冷却塔、热水系统、淋浴喷头、加湿器、喷泉均可成为来源','发热、不适、肌痛、头痛→畏寒、高热，干咳→黏痰或血丝→X线可见单侧或双侧片状、斑状阴影','常伴相对缓脉、腹泻、低钠血症和意识改变；用头孢类等β-内酰胺抗生素治疗无效'],
+src:'军团菌在25～42℃的水中繁殖，在冷却塔、热水管网、淋浴软管中形成生物膜。人吸入含菌气溶胶感染，一般不人传人。中老年、吸烟、慢性病和免疫力低下者是高危人群。1976年美国费城退伍军人协会年会期间的肺炎暴发使该病得名。',
+mech:'军团菌是胞内寄生菌，被吸入后在肺泡巨噬细胞内繁殖，引起肺炎，并可产生全身中毒症状。',
+tabs:[
+['临床表现',`<ul><li>潜伏期2～10天。</li><li>前驱期：发热、不适、肌痛、头痛。</li><li>进展期：畏寒、高热（可达40℃），干咳，继而黏痰或痰中带血丝；胸痛、呼吸困难。</li><li>肺外表现：相对缓脉，腹泻，低钠血症，意识模糊、谵妄；重症可致呼吸衰竭、肾衰竭。</li></ul>`],
+['检验分析',`<ul><li><b>尿抗原检测：</b>快速、无创，仅能检测嗜肺军团菌血清1型。</li><li><b>呼吸道标本培养：</b>使用BCYE培养基，是确诊金标准；获得菌株才能与环境菌株做分子分型比对。</li><li><b>核酸检测：</b>PCR快速检测。</li><li><b>血清抗体：</b>效价 ≥1:256 确诊，或双份血清4倍以上升高。</li></ul><span class="std">WS 394 公共场所集中空调冷却水：不得检出嗜肺军团菌</span>`],
+['鉴别诊断',`<ul><li><b>肺炎链球菌肺炎：</b>多为散发，铁锈色痰，对β-内酰胺类敏感。</li><li><b>流感：</b>潜伏期1～4天，人传人，家属同事中出现续发病例。</li><li><b>支原体肺炎：</b>多见于青少年，症状相对较轻。</li></ul>`],
+['处置要点',`<ul><li>治疗首选大环内酯类（阿奇霉素）或喹诺酮类（左氧氟沙星）。</li><li>立即排查冷却塔、热水系统等水系统，采样检测并做分型比对。</li><li>冷却塔停用、清洗、消毒；热水系统储水温度保持在60℃以上。</li><li>病例不需隔离，接触者不需医学观察。</li></ul>`]]},
+
+{id:'pontiac',name:'庞蒂亚克热',alias:'同为军团菌引起，非肺炎型',signs:['flu'],
+chips:['类流感症状','潜伏期1～2天','罹患率高、自愈'],
+key:['发热、头痛、肌痛、乏力，无肺炎','潜伏期短，仅1～2天','暴露人群中罹患率很高，2～5天自愈'],
+src:'与军团病来源相同，常见于温泉池、按摩浴池、冷却塔附近的人群。',
+mech:'可能是对军团菌及其产物的急性反应，而非肺部感染。',
+tabs:[
+['临床表现',`<p>类似流感的急性发热性疾病：发热、寒战、头痛、肌痛、乏力，可有咳嗽，但胸片无肺炎表现。</p>`],
+['检验分析',`<p>病例血清抗体检测；环境水样（温泉、按摩池、冷却塔）培养军团菌。尿抗原阳性率低于军团病。</p>`],
+['鉴别诊断',`<div class="tbl-wrap"><table><tr><th></th><th>军团病</th><th>庞蒂亚克热</th></tr><tr><td>潜伏期</td><td>2～10天</td><td>1～2天</td></tr><tr><td>肺炎</td><td>有</td><td>无</td></tr><tr><td>罹患率</td><td>低（&lt;5%）</td><td>高（可达90%）</td></tr><tr><td>病程</td><td>重，需抗菌治疗</td><td>轻，2～5天自愈</td></tr></table></div>`],
+['处置要点',`<p>对症治疗即可；重点是查找并处理污染的水系统，防止出现军团病病例。</p>`]]},
+
+{id:'pollen',name:'花粉病',alias:'季节性变应性鼻炎和哮喘',signs:['sneeze'],
+chips:['季节性发作','鼻痒喷嚏','哮喘'],
+key:['3～4月以树木花粉为主，8～9月以草本花粉为主','表现为鼻炎和哮喘：鼻痒、连续喷嚏、清水样涕、眼痒，重者喘息','离开花粉环境或雨后症状减轻'],
+src:'风媒植物花粉随风传播，城市绿化树种和北方的蒿属、豚草等是重要来源。',
+mech:'Ⅰ型（速发型）变态反应：致敏者再次接触花粉，IgE介导肥大细胞释放组胺等介质。',
+tabs:[
+['临床表现',`<p>鼻痒、连续喷嚏、大量清水样鼻涕、鼻塞，眼痒、结膜充血；部分人出现咳嗽、胸闷、喘息等季节性哮喘。</p>`],
+['检验分析',`<p>皮肤点刺试验、血清特异性IgE检测；城市花粉浓度监测可用于预报。</p>`],
+['鉴别诊断',`<p><b>上呼吸道感染：</b>有发热、咽痛，病程一周左右，无明显季节规律。</p>`],
+['处置要点',`<p>发布花粉浓度预报；高峰期减少户外活动，外出佩戴口罩和眼镜；抗组胺药、鼻用糖皮质激素对症治疗。</p>`]]},
+
+{id:'sewage',name:'污水处理和喷灌气溶胶',alias:'含病原微生物的生物气溶胶',signs:[],
+chips:['下风向居民','呼吸道刺激'],
+key:['污水处理厂曝气池、污水喷灌可产生含病原微生物的气溶胶','可引起下风向人群呼吸道刺激，并可能传播肠道病原体和军团菌'],
+src:'污水处理的曝气、搅拌环节，以及用污水灌溉农田的喷灌作业。',
+mech:'细小的液滴携带细菌、病毒、内毒素随风扩散，被人体吸入。',
+tabs:[
+['临床表现',`<p>咳嗽、咽部不适、眼刺激，部分人有胃肠道症状和乏力。</p>`],
+['检验分析',`<p>在下风向不同距离设点进行空气微生物采样，比较上、下风向差异。</p>`],
+['鉴别诊断',`<p>需排除同期的呼吸道传染病流行和化学性刺激气体。</p>`],
+['处置要点',`<p>设置卫生防护距离；曝气池加盖或建设防护林带；避免在居民区上风向进行污水喷灌。</p>`]]}
+],
+after:'',
+case:{title:'温泉团建后的"集体感冒"',meta:'教学案例（情景改编）',
+story:`<p>周末，一家公司组织62名员工到郊区的温泉度假村团建，住了一晚。度假村的室内恒温池和按摩浴池最受欢迎，几乎每个人都泡了一两个小时。</p><p>周一上午，公司人事打电话给区疾控：已经有四十多人请病假，都是发烧、头痛、浑身酸痛，"像得了重感冒"。到了周三，大部分人陆续好转。有员工担心"是不是新的病毒"，在公司群里转发各种猜测。</p><p>流调人员发现，没泡温泉、只在餐厅吃饭的5名员工无一发病；发病者胸片均未见肺炎，症状最重的一位也只是烧到38.9℃。</p>`,
+ask:['这次"集体感冒"最可能是什么？依据是什么？','它与军团病如何区分？','应如何处置？'],
+ans:`<p><b>1. 庞蒂亚克热。</b>依据：共同暴露于室内温泉和按摩浴池的气溶胶；潜伏期短（1～2天）；罹患率很高（40/57）；类流感症状、无肺炎；数日内自愈；未泡温泉者不发病。</p><p><b>2. 区分要点：</b>军团病潜伏期2～10天、罹患率低、有明确肺炎且病情重，需要抗菌治疗；庞蒂亚克热潜伏期短、罹患率高、无肺炎、自限。</p><p><b>3. 处置：</b>采集温泉池、按摩池水和管路生物膜检测军团菌；度假村暂停相关水池，清洗消毒并检测合格后开放；向员工说明病因，消除恐慌；提醒医疗机构关注后续可能出现的肺炎病例。</p>`},
+quiz:[
+{q:'怀疑军团菌病时，最快速、无创的实验室检查是？',o:['痰培养','尿抗原检测','双份血清抗体','血培养'],a:1,e:'尿抗原检测十几分钟到数小时可出结果，但只能检测嗜肺军团菌血清1型；溯源仍需培养获得菌株。'},
+{q:'一名肺炎患者头孢曲松治疗3天无效，同时有腹泻和低钠血症，近期入住过使用集中空调的酒店。经验性治疗应改用？',o:['加大头孢曲松剂量','阿奇霉素或左氧氟沙星','奥司他韦','暂停抗菌药观察'],a:1,e:'军团菌为胞内菌，β-内酰胺类效果差；大环内酯类和喹诺酮类能进入细胞内，是首选药物。'},
+{q:'与军团病相比，庞蒂亚克热的特点是？',o:['潜伏期更长','有肺炎表现','罹患率高、无肺炎、自愈','可人传人'],a:2,e:'庞蒂亚克热潜伏期仅1～2天，暴露人群罹患率很高，无肺炎，2～5天自愈。'}
+]};
+
+const INES=[
+{lv:0,name:'偏差',kind:'低于分级表',bg:'#8E9AA4',fg:'#fff',desc:'没有安全意义，不列入事件分级。',eg:'设备在运行限值范围内出现故障，按规程正常处理。'},
+{lv:1,name:'异常',kind:'事件',bg:'#E2BE00',fg:'#2A2200',desc:'没有风险，但表明安全措施运行有异常。',eg:'运行中偶然违反技术规格书，纵深防御的某一层次出现小问题，未造成任何照射。'},
+{lv:2,name:'普通事件',kind:'事件',bg:'#E39C00',fg:'#2A1C00',desc:'无场外影响，但内部可能有核物质污染扩散，或安全措施明显失效。',eg:'工作人员受到超过法定年剂量限值的照射；设施内非设计区域出现明显污染。'},
+{lv:3,name:'严重事件',kind:'事件',bg:'#DE7A00',fg:'#fff',desc:'放射性物质极小量释放，公众照射达到限值小部分；或场内严重污染、工作人员受到急性健康效应的照射。',eg:'2005年英国塞拉菲尔德核燃料后处理厂内部大量放射性溶液泄漏，被评为3级。'},
+{lv:4,name:'场外无显著风险',kind:'事故',bg:'#D2561A',fg:'#fff',desc:'放射性物质小量释放，公众受到规定限值的照射；或堆芯、放射性屏障明显损坏，有工作人员受致死剂量照射。',eg:'1999年日本东海村核燃料加工厂临界事故，2名工人因急性放射病死亡。'},
+{lv:5,name:'场外风险',kind:'事故',bg:'#BF3B1E',fg:'#fff',desc:'放射性物质有限释放，需局部实施应急计划；或堆芯严重损坏。',eg:'1979年美国三哩岛核电站事故，堆芯部分熔化；1987年巴西戈亚尼亚铯-137放射源事故。'},
+{lv:6,name:'重大事故',kind:'事故',bg:'#9E271B',fg:'#fff',desc:'放射性物质显著释放，需全面实施应急计划。',eg:'1957年苏联克什特姆核废料储罐爆炸。'},
+{lv:7,name:'特大事故',kind:'事故',bg:'#721813',fg:'#fff',desc:'放射性物质大量释放，造成严重健康影响及环境后果，需要大范围、长时间的防护行动。',eg:'1986年苏联切尔诺贝利核电站事故；2011年日本福岛第一核电站事故。'}
+];
+
+PAGES.nuke_level={cat:'rad',title:'核事故分级（INES）',
+lead:'国际核与放射事件分级表（INES）由国际原子能机构等制定，用统一的"刻度"向公众说明核与放射事件的安全意义。级别每升高一级，严重程度大约增加一个数量级。',
+intro:`<p>点击下方色阶，查看各级别的含义和实例。1～3级称为"事件"，4～7级称为"事故"。</p><div id="ines-slot"></div>
+<h2>分级总表</h2><div class="tbl-wrap"><table><tr><th>级别</th><th>名称</th><th>特征</th></tr>
+<tr><td>7级</td><td>特大事故</td><td>放射性物质大量释放，严重健康影响及环境后果</td></tr>
+<tr><td>6级</td><td>重大事故</td><td>放射性物质显著释放，需全面实施应急计划</td></tr>
+<tr><td>5级</td><td>场外风险</td><td>放射性物质有限释放，局部实施应急计划</td></tr>
+<tr><td>4级</td><td>场外无显著风险</td><td>放射性物质小量释放，公众受到规定限值照射</td></tr>
+<tr><td>3级</td><td>严重事件</td><td>放射性物质极小量释放，公众照射达到限值小部分</td></tr>
+<tr><td>2级</td><td>普通事件</td><td>无场外影响，但内部可能有核物质污染扩散</td></tr>
+<tr><td>1级</td><td>异常</td><td>没有风险，但表明安全措施运行有异常</td></tr></table></div>
+<div class="note"><p><b>判级看三个方面：</b>对人和环境的影响（释放量、照射剂量）；对设施内放射性屏障和控制的影响（如堆芯损坏、场内污染）；对纵深防御的影响（安全措施是否失效）。按三方面中最高的一项定级。</p></div>`,
+ines:true,
+case:{title:'同样是堆芯熔化，为什么差了两级？',meta:'真实事件对比',
+story:`<p>1979年3月，美国宾夕法尼亚州三哩岛核电站2号机组因给水系统故障、一个泄压阀卡在开启位置而操作人员未能及时识别，冷却剂持续流失，堆芯约一半熔化。不过，坚固的安全壳把绝大部分放射性物质留在了厂房内，周边居民受到的额外剂量很低。</p><p>七年后的1986年4月，苏联切尔诺贝利核电站4号机组在一次安全试验中功率骤增，反应堆发生爆炸并起火。这种堆型没有西方式的安全壳，大量放射性物质直接进入大气，飘散到欧洲多个国家。134人被确诊急性放射病，其中28人在事故当年死亡；电站周围30公里的区域至今仍为隔离区。</p>`,
+ask:['两起事故的INES级别分别是多少？','造成两者级别相差两级的关键因素是什么？','从公共卫生角度，两起事故的应急重点有何不同？'],
+ans:`<p><b>1.</b> 三哩岛为5级（场外风险）；切尔诺贝利为7级（特大事故）。</p><p><b>2.</b> 关键在于放射性物质向环境的释放量及其场外后果。两者堆芯都严重损坏，但三哩岛的安全壳发挥了作用，场外释放有限；切尔诺贝利的释放量巨大，造成大范围健康和环境影响。</p><p><b>3.</b> 三哩岛以风险沟通、环境监测和预防性疏散（孕妇、学龄前儿童）为主；切尔诺贝利需大规模撤离、急性放射病救治、儿童甲状腺防护（放射性碘）、食品和饮用水长期控制，以及长期健康随访。</p>`},
+quiz:[
+{q:'核电厂运行中发现一个冗余安全通道失效，及时修复，没有任何放射性释放和人员照射。按INES应定为？',o:['0级','1级','3级','4级'],a:1,e:'没有风险，但安全措施运行出现异常，属1级"异常"。'},
+{q:'INES中，1～3级统称为？',o:['事故','事件','偏差','紧急状态'],a:1,e:'1～3级为"事件"，4～7级为"事故"，0级为"偏差"。'},
+{q:'堆芯严重损坏，放射性物质大量释放，需要大范围、长期的防护行动，应定为？',o:['4级','5级','6级','7级'],a:3,e:'放射性物质大量释放并造成严重健康和环境后果，属7级特大事故。'}
+]};
+
+PAGES.nuke_rad={cat:'rad',title:'辐射事故分级与急性放射损伤',
+lead:'辐射事故多由放射源丢失、被盗、失控或射线装置误照射引起，常发生在医院、工业探伤、辐照加工等场所之外的意想不到的地方。识别的难点在于：受害者往往并不知道自己受到了照射。',
+intro:`<h2>辐射事故分级</h2><p class="muted small">依据《放射性同位素与射线装置安全和防护条例》</p>
+<div class="tbl-wrap"><table><tr><th>级别</th><th>判定条件</th></tr>
+<tr><td style="color:#9E271B;font-weight:700;white-space:nowrap">特别重大</td><td>Ⅰ类、Ⅱ类放射源丢失、被盗、失控造成大范围严重辐射污染后果，或者放射性同位素和射线装置失控导致3人以上（含3人）急性死亡</td></tr>
+<tr><td style="color:#C8401F;font-weight:700">重大</td><td>Ⅰ类、Ⅱ类放射源丢失、被盗、失控，或者放射性同位素和射线装置失控导致2人以下（含2人）急性死亡或者10人以上（含10人）急性重度放射病、局部器官残疾</td></tr>
+<tr><td style="color:#B07400;font-weight:700">较大</td><td>Ⅲ类放射源丢失、被盗、失控，或者放射性同位素和射线装置失控导致9人以下（含9人）急性重度放射病、局部器官残疾</td></tr>
+<tr><td style="color:#4B5966;font-weight:700">一般</td><td>Ⅳ类、Ⅴ类放射源丢失、被盗、失控，或者放射性同位素和射线装置失控导致人员受到超过年剂量限值的照射</td></tr></table></div>
+<div class="note"><p><b>判定技巧：</b>同时看"源的类别"和"后果"，按其中较重的一项定级。例如Ⅱ类源丢失，即使尚无人员受照，也已构成重大辐射事故。</p></div>
+<h2>放射源分类</h2><div class="tbl-wrap"><table><tr><th>类别</th><th>危险程度</th><th>无防护接触的后果</th><th>常见用途举例</th></tr>
+<tr><td>Ⅰ类</td><td>极高危险源</td><td>几分钟到1小时即可致人死亡</td><td>辐照加工装置、远距离放射治疗</td></tr>
+<tr><td>Ⅱ类</td><td>高危险源</td><td>几小时至几天可致人死亡</td><td>工业γ射线探伤、高剂量率近距离治疗</td></tr>
+<tr><td>Ⅲ类</td><td>危险源</td><td>几小时可造成永久性损伤，几天至几周可致死</td><td>固定式工业测量仪表（料位计、密度计）</td></tr>
+<tr><td>Ⅳ类</td><td>低危险源</td><td>基本不会造成永久性损伤，长时间近距离接触可致可恢复的临时损伤</td><td>低剂量率近距离治疗、部分测井源</td></tr>
+<tr><td>Ⅴ类</td><td>极低危险源</td><td>不会造成永久性损伤</td><td>静电消除器、低活度校准源</td></tr></table></div>
+<h2>急性放射损伤的识别</h2>
+<div class="tox" style="--c:var(--rad)"><div class="tox-key" style="margin-top:16px"><h4>识别要点</h4><ul><li>没有接触热源，却出现"烫伤样"红斑、水疱，部位常与口袋、手掌等携带物品的位置吻合</li><li>受照后数小时内出现恶心、呕吐、乏力，出现越早、越重，提示剂量越大</li><li>外周血淋巴细胞绝对数在1～2天内明显下降</li><li>追问病史：是否捡到过"金属零件""铅罐"、发光的粉末，是否进入过探伤现场或废品站</li></ul></div></div>
+<div class="tbl-wrap"><table><tr><th>类型</th><th>全身受照剂量</th><th>主要表现</th></tr>
+<tr><td>骨髓型急性放射病</td><td>1～10 Gy</td><td>初期恶心呕吐，经假愈期后出现白细胞、血小板减少，感染和出血</td></tr>
+<tr><td>肠型急性放射病</td><td>10～50 Gy</td><td>频繁呕吐、严重腹泻、血水便，水电解质紊乱</td></tr>
+<tr><td>脑型急性放射病</td><td>&gt;50 Gy</td><td>受照后很快出现意识障碍、共济失调、抽搐，数日内死亡</td></tr>
+<tr><td>局部放射性皮肤损伤</td><td>局部剂量</td><td>按剂量由轻到重依次出现脱毛、红斑、水疱、溃疡和坏死，经一段潜伏期后显现并可进行性加重</td></tr></table></div>
+<h2>外照射、放射性污染与内照射</h2><div class="tbl-wrap"><table><tr><th>类型</th><th>发生情形</th><th>处置重点</th></tr>
+<tr><td>外照射</td><td>密封源包壳完整，人在源附近受到射线照射</td><td>脱离源、估算剂量（物理剂量重建、染色体畸变分析）、对症救治；人体不带放射性，<b>不需去污</b></td></tr>
+<tr><td>体表污染</td><td>源破损或放射性物质泄漏，沾染到皮肤、衣物</td><td>脱去外衣即可去除大部分污染，再用温水和中性洗涤剂冲洗，监测至达标</td></tr>
+<tr><td>内照射</td><td>放射性核素经呼吸道、消化道或伤口进入体内</td><td>阻吸收和促排：放射性碘用稳定碘，铯用普鲁士蓝，钚、镅等用DTPA；须针对具体核素</td></tr></table></div>
+<div class="note ok"><p><b>外照射防护三原则：</b>缩短受照时间、增大与源的距离（剂量率与距离平方成反比）、设置屏蔽（铅、混凝土、水）。</p></div>`,
+case:{title:'发蓝光的粉末',meta:'真实事件回顾（概要）：1987年巴西戈亚尼亚事故',
+story:`<p>1987年9月，巴西戈亚尼亚市，两名拾荒者闯进一家废弃的私人放疗诊所，把一台旧治疗机的金属部件拆下来，用手推车拉回家。几天后，他们撬开了里面一个不锈钢小圆柱，卖给了废品站老板。</p><p>天黑后，老板发现圆柱里的粉末竟然发出幽幽的蓝光。他觉得神奇，把粉末分给亲友"欣赏"。一个6岁的小女孩把粉末抹在身上，还在吃饭时沾到了手上。</p><p>接下来的几周，许多人出现恶心、呕吐、腹泻和皮肤损伤。直到老板的妻子把装着粉末的袋子坐公交车送到卫生部门，人们才意识到这是放射性物质——那粉末是氯化铯-137。最终，约11万人接受了放射性污染筛查，4人死亡，其中包括那个小女孩。这起事故被评为INES 5级。</p>`,
+ask:['与"密封源完整的外照射"相比，这起事故的危害有何不同？','对受害者应采取哪些医学处置？','从预防角度，这起事故给我们哪些启示？'],
+ans:`<p><b>1. 不同之处：</b>源被撬开，粉末状铯-137扩散，造成大范围体表污染、环境污染和内照射（误食、经手入口）。受害者身上本身带有放射性，会污染住所、交通工具，甚至影响医护人员。</p><p><b>2. 医学处置：</b>对接触者进行体表污染监测和分类；体表去污；对内污染者口服普鲁士蓝促进铯排出，并监测体内剂量；对急性放射病和局部损伤进行专科救治；进行长期随访和心理支持。</p><p><b>3. 启示：</b>放射源必须全生命周期管理，退役、废弃的设备也要有人负责；加强废品回收行业管理和公众科普——不明金属物、发光粉末不碰、不拿、不卖；医务人员遇到原因不明的皮肤损伤和胃肠症状聚集时，要想到放射损伤。</p>`},
+quiz:[
+{q:'某企业丢失一枚Ⅲ类放射源，尚未造成人员受照。应定为？',o:['特别重大辐射事故','重大辐射事故','较大辐射事故','一般辐射事故'],a:2,e:'Ⅲ类放射源丢失、被盗、失控，即属较大辐射事故。'},
+{q:'工人拾到完整的密封放射源揣在口袋里数小时，对他最不必要的措施是？',o:['外周血淋巴细胞动态监测','染色体畸变分析估算剂量','服用碘化钾','局部皮肤损伤专科处理'],a:2,e:'稳定碘只对放射性碘内照射有效；密封源外照射时人体没有摄入放射性碘，服碘没有意义。'},
+{q:'外照射防护的三原则是？',o:['隐蔽、撤离、服碘','时间、距离、屏蔽','去污、促排、阻吸收','监测、报告、隔离'],a:1,e:'缩短时间、增大距离、设置屏蔽是外照射防护的基本原则。'}
+]};
+
+PAGES.nuke_state={cat:'rad',title:'核事故应急状态与公众防护',
+lead:'核电厂事故按后果可能波及的范围，分为四个应急状态。状态越高，参与响应的组织越多，对公众采取的防护行动也越广。',
+intro:`<h2>四级应急状态</h2><ol class="state-list">
+<li><b>应急待命：</b>出现可能危及核安全的特定情况，人员进入戒备状态。<br><span class="muted small">由核电厂营运单位响应，并向上级报告。</span></li>
+<li><b>厂房应急：</b>后果仅限于局部区域，厂内响应，通知厂外组织。<br><span class="muted small">营运单位启动厂内应急组织。</span></li>
+<li><b>场区应急：</b>后果蔓延至整个场区，通知省级政府指定部门。<br><span class="muted small">场区内非必要人员撤离，场外应急组织进入准备状态。</span></li>
+<li><b>场外应急：</b>后果超越场区边界，实施场内和场外应急计划。<br><span class="muted small">也称总体应急；地方政府组织公众采取隐蔽、撤离、服碘等防护行动。</span></li></ol>
+<h2>应急计划区</h2><div class="tbl-wrap"><table><tr><th>区域</th><th>参考范围（我国核电厂）</th><th>主要照射途径</th><th>主要防护行动</th></tr>
+<tr><td>烟羽应急计划区（内区）</td><td>半径约3～5公里</td><td>烟羽外照射、吸入</td><td>撤离、隐蔽、服用稳定碘</td></tr>
+<tr><td>烟羽应急计划区（外区）</td><td>半径约7～10公里</td><td>烟羽外照射、吸入</td><td>隐蔽、服用稳定碘，必要时撤离</td></tr>
+<tr><td>食入应急计划区</td><td>半径约30～50公里</td><td>食用受污染的食物和水</td><td>控制食品、饮用水和饲料</td></tr></table></div>
+<h2>公众防护行动</h2><div class="tbl-wrap"><table><tr><th>措施</th><th>做法</th><th>注意</th></tr>
+<tr><td>隐蔽</td><td>留在室内，关闭门窗和通风系统</td><td>砖混结构建筑可显著降低吸入和外照射剂量；一般不超过2天</td></tr>
+<tr><td>撤离</td><td>在烟羽到达前，将人员转移出受影响区域</td><td>效果最好，但组织难度大，本身也有风险，需优先保障老人、病人和儿童</td></tr>
+<tr><td>服用稳定碘</td><td>口服碘化钾，使甲状腺"饱和"，阻止放射性碘蓄积</td><td>只对放射性碘有效，须在政府指令下服用</td></tr>
+<tr><td>控制食品和饮用水</td><td>禁止或限制食用当地蔬菜、牛奶，停用受污染水源</td><td>儿童饮用的牛奶是放射性碘进入人体的重要途径</td></tr>
+<tr><td>体表去污</td><td>撤离人员更换衣物、淋浴</td><td>在撤离路线上设置监测和去污站</td></tr>
+<tr><td>临时避迁、永久再定居</td><td>对长期剂量较高地区的居民进行安置</td><td>适用于事故中、后期</td></tr></table></div>
+<h3>稳定碘（碘化钾）参考剂量</h3><div class="tbl-wrap"><table><tr><th>人群</th><th class="num">碘化钾单次剂量</th></tr>
+<tr><td>成人及12岁以上青少年（含孕妇、哺乳期妇女）</td><td class="num">130 mg</td></tr>
+<tr><td>3～12岁儿童</td><td class="num">65 mg</td></tr>
+<tr><td>1个月～3岁婴幼儿</td><td class="num">32 mg</td></tr>
+<tr><td>新生儿（1个月以内）</td><td class="num">16 mg</td></tr></table></div>
+<p class="small muted">最佳服用时机为预计吸入放射性碘之前至吸入后数小时内，越晚效果越差。40岁以上成人从服碘中获益较小，甲状腺疾病患者、碘过敏者应遵医嘱。</p>
+<h2>卫生健康部门的职责</h2><ul><li>组织医学应急救援：现场检伤分类、伤员去污、急性放射病和复合伤救治；</li><li>对撤离人员进行体表污染监测和去污，评估内污染；</li><li>指导稳定碘的发放和服用；</li><li>监测食品、饮用水的放射性水平，提出控制建议；</li><li>开展心理援助和健康风险沟通，建立受照人群健康档案并长期随访。</li></ul>`,
+case:{title:'从3公里到30公里',meta:'真实事件回顾（概要）：2011年福岛第一核电站事故',
+story:`<p>2011年3月11日下午，日本东北部发生9.0级地震，随后的海啸越过了福岛第一核电站的防波堤，淹没了备用柴油发电机。核电站失去全部交流电源，多台机组的冷却系统相继停止工作。</p><p>当晚，政府下令电站周围3公里内居民撤离，3～10公里内居民在室内隐蔽。第二天清晨，撤离范围扩大到10公里；当天下午1号机组厂房发生氢气爆炸，傍晚撤离范围扩大到20公里。3月15日，20～30公里范围内的居民被要求在室内隐蔽。</p><p>事故后来被定为INES 7级。值得深思的是：没有人因急性放射病死亡，但仓促的撤离过程中，有一些住院的老人和重病患者因转运途中缺乏医疗照护而去世。</p>`,
+ask:['事故当晚进入的是哪一级应急状态？依据是什么？','为什么撤离范围是逐步扩大的？近距离和远距离居民的防护行动有何不同？','"撤离途中老人死亡"给公共卫生应急带来什么教训？'],
+ans:`<p><b>1. 场外应急（总体应急）。</b>事故后果可能超越场区边界，政府已下令对场外公众实施撤离和隐蔽。</p><p><b>2.</b> 应急决策依据事故发展和预测的剂量动态调整：随着机组状况恶化、发生爆炸，预测影响范围扩大，防护行动范围也随之扩大。近处以撤离为主，较远处以隐蔽为主，必要时配合服用稳定碘和控制食品饮用水。</p><p><b>3. 教训：</b>防护行动本身也有健康风险。应急预案要事先为医院、养老院等特殊人群制定专门的转运方案，配备医疗照护；在撤离与就地隐蔽之间权衡利弊，并加强心理支持和长期健康随访。</p>`},
+quiz:[
+{q:'事故后果超越场区边界，需同时实施场内和场外应急计划，属于？',o:['应急待命','厂房应急','场区应急','场外应急'],a:3,e:'场外应急（总体应急）是最高级别的应急状态。'},
+{q:'成人服用碘化钾的单次参考剂量是？',o:['16 mg','65 mg','130 mg','500 mg'],a:2,e:'成人及12岁以上青少年为130 mg（含碘100 mg），3～12岁儿童减半。'},
+{q:'食入应急计划区的主要防护行动是？',o:['撤离','隐蔽','服用稳定碘','控制食品和饮用水'],a:3,e:'食入应急计划区的主要照射途径是食用受污染的食物和水，防护重点是对食品、饮用水和饲料的控制。'}
+]};
+
+const ORDER=['water_chem','water_bio','water_eutro','air_chem','air_bio','nuke_level','nuke_rad','nuke_state'];
+const EXTRA_LOOKUP=[{name:'急性放射损伤（外照射）',page:'nuke_rad',cat:'rad',signs:['skin','lympho','gi']}];
+
+</script>
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const main=$('#content');
+let visited=new Set();
+try{visited=new Set(JSON.parse(localStorage.getItem('tox_visited')||'[]'))}catch(e){}
+function saveVisited(){try{localStorage.setItem('tox_visited',JSON.stringify([...visited]))}catch(e){}}
+
+const WARN='<svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 15 14.5H1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 6v4" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="12" r=".9" fill="currentColor"/></svg>';
+const titleOf=id=>{for(const g of NAV)for(const [k,t] of g.items)if(k===id)return t;return ''};
+
+/* ---------- 侧栏 ---------- */
+function buildNav(){
+  let h=`<div class="brand"><b>有毒有害因素识别</b><span>群体中毒事件处置课件</span></div>
+  <div class="nav-top"><button class="nav-item" data-go="home">课件首页</button><button class="nav-item" data-go="lookup">体征速查</button></div>`;
+  NAV.forEach(g=>{
+    const c=CATS[g.cat];
+    h+=`<div class="nav-group"><div class="nav-title"><i style="background:${c.color}"></i>${c.name}</div>`;
+    g.items.forEach(([id,t])=>{h+=`<button class="nav-item" style="--c:${c.color}" data-go="${id}"><span>${t}</span><span class="seen" data-seen="${id}">${visited.has(id)?'已学':''}</span></button>`});
+    h+='</div>';
+  });
+  h+='<div class="side-foot">对应课程标准：模块三 特定类别事件处置<br>教学内容仅供课堂学习使用</div>';
+  $('#sidebar').innerHTML=h;
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');
+  if(g){e.preventDefault();go(g.dataset.go,g.dataset.tox);}
+});
+
+/* ---------- 路由 ---------- */
+function go(id,toxId){
+  if(!PAGES[id]&&id!=='lookup')id='home';
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.go===id));
+  if(id==='home')renderHome();else if(id==='lookup')renderLookup();else renderPage(id);
+  document.body.classList.remove('nav-open');
+  if(location.hash.slice(1)!==id)history.replaceState(null,'','#'+id);
+  if(PAGES[id]){visited.add(id);saveVisited();const s=document.querySelector(`[data-seen="${id}"]`);if(s)s.textContent='已学';}
+  const scroller=window.innerWidth>900?$('#main'):document.scrollingElement;
+  if(toxId){const card=document.getElementById('t-'+toxId);if(card){toggleCard(card,true);setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'start'}),30);return;}}
+  scroller.scrollTop=0;
+}
+
+/* ---------- 首页 ---------- */
+function renderHome(){
+  const sw=[['#5E6494','青紫','亚硝酸盐：口唇、指甲青紫，吸氧不缓解'],['#5B2B1C','巧克力色血液','亚硝酸盐：振摇15分钟仍不转红'],['#C7364E','樱桃红','一氧化碳：重度中毒时出现'],['#E2533F','鲜红','氰化物：缺氧却不发绀']];
+  let h=`<div class="hero"><span class="cat-tag" style="background:var(--rule2);color:var(--ink2)">预防医学专业《突发公共卫生事件应急处理》</span><h1>有毒有害因素识别</h1>
+  <p class="lead">群体中毒事件的现场，往往没有现成的诊断。本课件按饮用水、大气、核与辐射三类污染来源，梳理每种毒物的识别点、检验分析与鉴别诊断，并配有案例和小测。</p></div>
+  <div class="swatches">${sw.map(s=>`<div class="sw"><div class="chip-color" style="background:${s[0]}"></div><b>${s[1]}</b><span>${s[2]}</span></div>`).join('')}</div>
+  <p class="sw-cap">同样是"缺氧"，皮肤和血液的颜色却各不相同——这是现场最直观的鉴别线索。</p>
+  <h2>学习模块</h2><div class="mod-grid">`;
+  NAV.forEach(g=>{const c=CATS[g.cat];let n=0;g.items.forEach(([id])=>{n+=(PAGES[id].toxins||[]).length});
+    h+=`<div class="mod" style="--c:${c.color}"><h3>${c.name}</h3><span class="muted small">${g.items.length}个专题${n?`，${n}种毒物或疾病`:''}</span><ul>${g.items.map(([id,t])=>`<li><button data-go="${id}">${t}</button></li>`).join('')}</ul></div>`});
+  h+=`</div><h2>学习路径</h2><ol class="steps"><li>先读红框中的<b>识别要点</b>，建立第一印象</li><li>展开卡片，依次查看临床表现、检验分析、鉴别诊断和救治要点</li><li>阅读页末案例，先独立思考，再查看分析</li><li>完成小测，检验掌握程度</li></ol>
+  <div class="note"><p>遇到一组体征拿不准时，可以使用<button class="btn ghost" style="padding:2px 10px;margin:0 4px" data-go="lookup">体征速查</button>，勾选观察到的表现，系统会列出可能的毒物供你对照学习。</p></div>`;
+  main.innerHTML=h;
+}
+
+/* ---------- 内容页 ---------- */
+function renderPage(id){
+  const p=PAGES[id],c=CATS[p.cat];
+  let h=`<span class="cat-tag cat-${p.cat}">${c.name}</span><h1>${p.title}</h1><p class="lead">${p.lead}</p>${p.intro||''}`;
+  if(p.toxins&&p.toxins.length){
+    h+=`<div class="page-tools"><h2 style="margin:0">识别卡</h2><button class="btn ghost" id="expand-all">全部展开</button></div>`;
+    p.toxins.forEach(t=>{h+=toxCard(t,c.color)});
+  }
+  h+=p.after||'';
+  if(p.case)h+=caseBlock(p.case);
+  if(p.quiz)h+=quizBlock(p.quiz);
+  const i=ORDER.indexOf(id),pr=ORDER[i-1],nx=ORDER[i+1];
+  h+=`<div class="pager">${pr?`<button class="btn ghost" data-go="${pr}">上一节：${titleOf(pr)}</button>`:''}${nx?`<button class="btn next" data-go="${nx}">下一节：${titleOf(nx)}</button>`:`<button class="btn next" data-go="lookup">去体征速查练习</button>`}</div>`;
+  main.innerHTML=h;
+  if(p.ines)mountInes();
+  const ea=$('#expand-all');
+  if(ea)ea.onclick=()=>{const open=ea.textContent==='全部展开';document.querySelectorAll('.tox[data-tox]').forEach(cd=>toggleCard(cd,open));ea.textContent=open?'全部收起':'全部展开';};
+}
+function toxCard(t,color){
+  return `<article class="tox" id="t-${t.id}" data-tox style="--c:${color}">
+  <button class="tox-head" aria-expanded="false" aria-controls="tb-${t.id}"><span class="tox-name">${t.name}</span><span class="tox-toggle">展开详情</span><span class="tox-alias">${t.alias}</span><span class="chips">${t.chips.map(x=>`<span class="chip">${x}</span>`).join('')}</span></button>
+  <div class="tox-key"><h4>${WARN}识别要点</h4><ul>${t.key.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+  <div class="tox-body" id="tb-${t.id}" hidden>
+    <div class="tox-meta"><div><h4>来源与暴露途径</h4><p>${t.src}</p></div><div><h4>致病机制</h4><p>${t.mech}</p></div></div>
+    <div class="tabs" role="tablist">${t.tabs.map((tb,i)=>`<button class="tab" role="tab" aria-selected="${i===0}" data-tab="${i}">${tb[0]}</button>`).join('')}</div>
+    <div class="tabpanel" role="tabpanel">${t.tabs[0][1]}</div>
+  </div></article>`;
+}
+function toggleCard(card,force){
+  const head=card.querySelector('.tox-head'),body=card.querySelector('.tox-body');
+  const open=force!==undefined?force:head.getAttribute('aria-expanded')!=='true';
+  head.setAttribute('aria-expanded',open);body.hidden=!open;
+  head.querySelector('.tox-toggle').textContent=open?'收起':'展开详情';
+}
+main.addEventListener('click',e=>{
+  const head=e.target.closest('.tox-head');
+  if(head){toggleCard(head.closest('.tox'));return;}
+  const tab=e.target.closest('.tab');
+  if(tab){
+    const card=tab.closest('.tox'),id=card.id.slice(2);
+    let t;for(const k in PAGES)(PAGES[k].toxins||[]).forEach(x=>{if(x.id===id)t=x});
+    card.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',b===tab));
+    card.querySelector('.tabpanel').innerHTML=t.tabs[+tab.dataset.tab][1];return;
+  }
+  const rev=e.target.closest('.case-reveal');
+  if(rev){const a=rev.closest('.case').querySelector('.case-ans');a.hidden=!a.hidden;rev.textContent=a.hidden?'查看分析':'收起分析';return;}
+  const opt=e.target.closest('.opt');
+  if(opt)answer(opt);
+});
+main.addEventListener('keydown',e=>{
+  const tab=e.target.closest('.tab');if(!tab)return;
+  if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const tabs=[...tab.parentNode.children];let i=tabs.indexOf(tab)+(e.key==='ArrowRight'?1:-1);i=(i+tabs.length)%tabs.length;tabs[i].focus();tabs[i].click();}
+});
+
+/* ---------- 案例与小测 ---------- */
+function caseBlock(c){
+  return `<section class="case"><div class="case-head"><h3>案例：${c.title}</h3><span>${c.meta}</span></div><div class="case-story">${c.story}</div>
+  <div class="case-ask"><h4>请思考</h4><ol>${c.ask.map(x=>`<li>${x}</li>`).join('')}</ol><button class="btn case-reveal">查看分析</button></div>
+  <div class="case-ans" hidden>${c.ans}</div></section>`;
+}
+function quizBlock(qs){
+  return `<h2>随堂小测</h2><p class="muted small" id="quiz-score">共${qs.length}题，选择后立即显示解析。</p><div class="quiz" data-total="${qs.length}">${qs.map((q,i)=>`<div class="q" data-a="${q.a}"><div class="q-stem">${i+1}. ${q.q}</div>${q.o.map((o,j)=>`<button class="opt" data-j="${j}"><span class="k">${'ABCD'[j]}</span><span>${o}</span></button>`).join('')}<div class="q-exp" hidden><b></b>${q.e}</div></div>`).join('')}</div>`;
+}
+function answer(opt){
+  const q=opt.closest('.q');if(q.dataset.done)return;
+  q.dataset.done=1;const a=+q.dataset.a,j=+opt.dataset.j,ok=a===j;
+  q.dataset.ok=ok?1:0;
+  q.querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(k===a)b.classList.add('right');});
+  if(!ok)opt.classList.add('wrong');
+  const ex=q.querySelector('.q-exp');ex.hidden=false;ex.querySelector('b').textContent=ok?'回答正确。':`正确答案是 ${'ABCD'[a]}。`;
+  const quiz=q.closest('.quiz'),done=quiz.querySelectorAll('.q[data-done]'),right=quiz.querySelectorAll('.q[data-ok="1"]').length;
+  $('#quiz-score').textContent=`已完成 ${done.length}/${quiz.dataset.total} 题，答对 ${right} 题。`+(done.length==quiz.dataset.total?(right==quiz.dataset.total?'全部正确，可以进入下一节。':'建议回到识别卡复习答错的内容。'):'');
+}
+
+/* ---------- INES 色阶 ---------- */
+function mountInes(){
+  const slot=$('#ines-slot');
+  slot.innerHTML=`<div class="ines" role="group" aria-label="INES级别">${INES.map(l=>`<button style="background:${l.bg};color:${l.fg}" aria-pressed="false" data-lv="${l.lv}">${l.lv}<small>${l.name}</small></button>`).join('')}</div>
+  <div class="ines-band"><span>偏差</span><span>事件</span><span>事故</span></div><div class="ines-detail" id="ines-detail"></div>`;
+  const show=lv=>{const l=INES[lv];slot.querySelectorAll('.ines button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.lv===lv));
+    $('#ines-detail').innerHTML=`<h3>${l.lv}级 ${l.name}<span class="muted small" style="font-family:var(--sans);font-weight:400;margin-left:10px">${l.kind}</span></h3><p>${l.desc}</p><p class="small"><b>实例：</b>${l.eg}</p>`;};
+  slot.addEventListener('click',e=>{const b=e.target.closest('[data-lv]');if(b)show(+b.dataset.lv)});
+  show(7);
+}
+
+/* ---------- 体征速查 ---------- */
+const picked=new Set();
+function allEntries(){
+  const list=[];
+  ORDER.forEach(pid=>(PAGES[pid].toxins||[]).forEach(t=>{if(t.signs&&t.signs.length)list.push({name:t.name,page:pid,cat:PAGES[pid].cat,signs:t.signs,tox:t.id})}));
+  return list.concat(EXTRA_LOOKUP);
+}
+const signLabel={};SIGN_GROUPS.forEach(g=>g[1].forEach(([k,v])=>signLabel[k]=v));
+function renderLookup(){
+  let h=`<span class="cat-tag" style="background:var(--rule2);color:var(--ink2)">练习工具</span><h1>体征速查</h1>
+  <p class="lead">勾选你在现场观察到的表现，下方会按吻合程度列出可能的毒物或疾病。点击结果可跳转到对应识别卡。</p>
+  <div class="note alert small"><p>速查只用于学习和建立思路。现场判断必须结合流行病学调查和实验室检验，不能仅凭体征下结论。</p></div>`;
+  SIGN_GROUPS.forEach(([g,items])=>{h+=`<div class="sign-group"><h4>${g}</h4><div class="sign-list">${items.map(([k,v])=>`<button class="sign" data-sign="${k}" aria-pressed="${picked.has(k)}">${v}</button>`).join('')}</div></div>`});
+  h+=`<div class="page-tools"><h2 style="margin:0">可能的原因</h2><button class="btn ghost" id="clear-signs">清空选择</button></div><div id="lookup-res"></div>`;
+  main.innerHTML=h;
+  main.querySelectorAll('.sign').forEach(b=>b.onclick=()=>{const k=b.dataset.sign;picked.has(k)?picked.delete(k):picked.add(k);b.setAttribute('aria-pressed',picked.has(k));updateLookup();});
+  $('#clear-signs').onclick=()=>{picked.clear();main.querySelectorAll('.sign').forEach(b=>b.setAttribute('aria-pressed','false'));updateLookup();};
+  updateLookup();
+}
+function updateLookup(){
+  const box=$('#lookup-res');
+  if(!picked.size){box.innerHTML='<p class="muted">尚未选择体征。可以从颜色或气味开始，它们最具鉴别意义。</p>';return;}
+  const res=allEntries().map(e=>{const hit=e.signs.filter(s=>picked.has(s));return {...e,hit,score:hit.length/picked.size,prec:hit.length/e.signs.length}}).filter(e=>e.hit.length).sort((a,b)=>b.hit.length-a.hit.length||b.prec-a.prec);
+  if(!res.length){box.innerHTML='<p class="muted">没有找到同时符合这些表现的条目。试着减少一两个体征，或检查是否有不相容的组合。</p>';return;}
+  box.innerHTML=res.slice(0,8).map(e=>{const c=CATS[e.cat];return `<div class="result" style="--c:${c.color}"><div><b>${e.name}</b><div class="meta">${c.name}：${titleOf(e.page)}</div></div><button class="btn ghost" data-go="${e.page}" ${e.tox?`data-tox="${e.tox}"`:''}>查看识别卡</button>
+  <div class="bar"><i style="width:${Math.round(e.score*100)}%"></i></div><div class="hit">${e.signs.map(s=>`<span class="${picked.has(s)?'on':''}">${signLabel[s]}</span>`).join('')}</div></div>`}).join('')+`<p class="muted small">色条表示所选体征中有多少与该条目吻合；深色标签为已吻合的体征，浅色为该毒物的其他典型表现，可以回到现场进一步核实。</p>`;
+}
+
+/* ---------- 启动 ---------- */
+buildNav();
+$('#menu-btn').onclick=()=>document.body.classList.toggle('nav-open');
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.body.classList.remove('nav-open')});
+go(location.hash.slice(1)||'home');
+})();
+
+</script>
+</body>
+</html>
